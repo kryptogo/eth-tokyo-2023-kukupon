@@ -24,7 +24,7 @@ var Campaigns = []Campaign{
 	{
 		ID: "ape_2023",
 		RequiredCondition: []string{
-			"Welcome to new users who own BAYC nft within the past three months!",
+			"New BAYC holders within the past three months!",
 		},
 		GraphqlReq: GraphqlRequest{
 			Query: `query BAYCHoldersENSAndImages {
@@ -45,14 +45,13 @@ var Campaigns = []Campaign{
 			OperationName: "BAYCHoldersENSAndImages",
 		},
 		Sponsor:      "Bored Ape",
-		Image:        "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?auto=format&w=3840",
+		Image:        "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/bayc.png",
 		SponsorGas:   *big.NewInt(10000000000000000), // 0.01
 		CouponAmount: 2,
 	},
 	{
 		ID: "eth_global_tokyo_2023",
 		RequiredCondition: []string{
-			"Interacted with dapp 1inch at least 100 times",
 			"Total transaction amount exceeds 3000 USDC.",
 		},
 		GraphqlReq: GraphqlRequest{
@@ -84,7 +83,7 @@ var Campaigns = []Campaign{
 			OperationName: "GetUserInteractedWithTokenAddress",
 		},
 		Sponsor:      "1inch",
-		Image:        "https://1inch.io/assets/social-image/main-cover-2.png",
+		Image:        "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/1inch.png",
 		SponsorGas:   *big.NewInt(10000000000000000), // 0.01
 		CouponAmount: 2,
 	},
@@ -112,7 +111,7 @@ var Campaigns = []Campaign{
 			OperationName: "AzukiHoldersENSAndImages",
 		},
 		Sponsor:      "Azuki",
-		Image:        "https://i.seadn.io/gcs/files/c1c0e5d22d1d52e834c8a72566c644e9.png?auto=format&w=384",
+		Image:        "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/azuki.png",
 		SponsorGas:   *big.NewInt(10000000000000000), // 0.01
 		CouponAmount: 3,
 	},
@@ -169,10 +168,163 @@ var Campaigns = []Campaign{
 			OperationName: "KGYCHoldersENSAndImages",
 		},
 		Sponsor: "KryptoGO",
-		Image:   "https://twnewshub.com/wp-content/uploads/2021/12/Android-topic.png",
+		Image:   "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/kryptogo.png",
 		// SponsorGas: *big.NewInt(500000000000000000), // 0.5 matic
 		SponsorGas:   *big.NewInt(18000000000000000), // 0.01 mumbai //TODO:
 		CouponAmount: 3,
+	},
+
+	{
+		ID: "curve",
+		RequiredCondition: []string{
+			"Stake a transaction of over 1000 U!",
+		},
+		GraphqlReq: GraphqlRequest{
+			Query: `
+	query Curve {
+		TokenTransfers(
+			input: {
+				filter: {
+					_or: [
+						{from: {_eq: "0x45F783CCE6B7FF23B2ab2D70e416cdb7D6055f51"}},
+						{to: {_eq: "0x45F783CCE6B7FF23B2ab2D70e416cdb7D6055f51"}}
+					]
+				},
+				blockchain: ethereum,
+				limit: 30
+			}
+		) {
+			TokenTransfer {
+				from {
+					addresses
+				}
+				to {
+					addresses
+				}
+			}
+		}
+	}
+`,
+			OperationName: "Curve",
+		},
+		Sponsor:      "Curve",
+		Image:        "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/curve.png",
+		SponsorGas:   *big.NewInt(10000000000000000), // 0.01
+		CouponAmount: 2,
+	},
+	{
+		ID: "ens",
+		RequiredCondition: []string{
+			"Holding an ENS <3",
+		},
+		GraphqlReq: GraphqlRequest{
+			Query: `
+	query Ens {
+		TokenTransfers(
+			input: {
+				filter: {
+					_or: [
+						{from: {_eq: "0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72"}},
+						{to: {_eq: "0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72"}}
+					]
+				},
+				blockchain: ethereum,
+				limit: 30
+			}
+		) {
+			TokenTransfer {
+				from {
+					addresses
+				}
+				to {
+					addresses
+				}
+			}
+		}
+	}
+`,
+			OperationName: "Ens",
+		},
+		Sponsor:      "ENS",
+		Image:        "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/ens.png",
+		SponsorGas:   *big.NewInt(10000000000000000), // 0.01
+		CouponAmount: 2,
+	},
+	{
+		ID: "LooksRare",
+		RequiredCondition: []string{
+			"With five transactions on LooksRare.",
+		},
+		GraphqlReq: GraphqlRequest{
+			Query: `
+	query LooksRare {
+		TokenTransfers(
+			input: {
+				filter: {
+					_or: [
+						{from: {_eq: "0x0000000000E655fAe4d56241588680F86E3b2377"}},
+						{to: {_eq: "0x0000000000E655fAe4d56241588680F86E3b2377"}}
+					]
+				},
+				blockchain: ethereum,
+				limit: 30
+			}
+		) {
+			TokenTransfer {
+				from {
+					addresses
+				}
+				to {
+					addresses
+				}
+			}
+		}
+	}
+`,
+			OperationName: "LooksRare",
+		},
+		Sponsor:      "LooksRare",
+		Image:        "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/looksrare.png",
+		SponsorGas:   *big.NewInt(10000000000000000), // 0.01
+		CouponAmount: 2,
+	},
+	{
+		ID: "Lido",
+		RequiredCondition: []string{
+			"With five transactions on Lido.",
+		},
+		GraphqlReq: GraphqlRequest{
+			Query: `
+	query Lido {
+		TokenTransfers(
+			input: {
+				filter: {
+					_or: [
+						{from: {_eq: "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32"}},
+						{to: {_eq: "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32"}}
+					]
+				},
+				blockchain: ethereum,
+				limit: 30
+			}
+		) {
+			TokenTransfer {
+				from {
+					addresses
+				}
+				to {
+					addresses
+				}
+			}
+		}
+	}
+`,
+			OperationName: "Lido",
+		},
+		Sponsor:      "Lido",
+		Image:        "https://wallet-static.kryptogo.com/public/announcement/kg_2023/kukupon/coupon/lido.png",
+		SponsorGas:   *big.NewInt(10000000000000000), // 0.01
+		CouponAmount: 2,
 	},
 }
 
