@@ -12,7 +12,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
-	alchemyapi "github.com/kryptogo/eth-tokyo-2023-kukuponpon/pkg/alchemy-api"
+	alchemyapi "github.com/kryptogo/eth-tokyo-2023-kukupon/pkg/alchemy-api"
 )
 
 func composeTxData(from, to string) (*bind.TransactOpts, error) {

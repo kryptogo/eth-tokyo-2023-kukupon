@@ -12,7 +12,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/kryptogo/eth-tokyo-2023-kukuponpon/pkg/db"
+	"github.com/kryptogo/eth-tokyo-2023-kukupon/pkg/db"
 )
 
 func GetCoupons(camapignId string) []string {

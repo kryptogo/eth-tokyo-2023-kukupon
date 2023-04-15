@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kryptogo/eth-tokyo-2023-kukuponpon/pkg/db"
+	"github.com/kryptogo/eth-tokyo-2023-kukupon/pkg/db"
 )
 
 func VerifyMembership(campaignID, from string) bool {

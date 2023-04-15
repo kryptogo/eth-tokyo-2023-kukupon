@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kryptogo/eth-tokyo-2023-kukuponpon/pkg/service"
+	"github.com/kryptogo/eth-tokyo-2023-kukupon/pkg/service"
 )
 
 // GetCampaigns response campaigns
