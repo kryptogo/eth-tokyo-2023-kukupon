@@ -52,12 +52,14 @@ func GenerateWallets(number int) ([]string, []string) {
 }
 
 func GenerateWallets4337(wallets []string) []string {
-	// SimpleAccountFactory.GetA
 	hostWalletAddress := os.Getenv("SIGNING_WALLET_ADDRESS")
 	SimpleAccountFactoryAddress := os.Getenv("SIMPLE_ACCOUNT_FACTORY_ADDRESS")
 	a, txOpts, err := PrepareTxAccountFactory(hostWalletAddress, SimpleAccountFactoryAddress)
 	if err != nil {
 		panic(err)
+	}
+	if txOpts == nil {
+		panic("txOpts is nil")
 	}
 
 	session := SimpleAccountFactorySession{

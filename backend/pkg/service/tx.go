@@ -3,6 +3,7 @@ package service
 import (
 	"crypto/ecdsa"
 	"encoding/hex"
+	"fmt"
 	"math/big"
 	"os"
 
@@ -16,10 +17,13 @@ import (
 
 func composeTxData(from string) (*bind.TransactOpts, error) {
 	value := big.NewInt(0) // nft transfer value is 0
+	fmt.Println("composeTxData before GetNextNonce")
 	nonce, err := alchemyapi.GetNextNonce(from)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("composeTxData after GetNextNonce")
+
 	opts := &bind.TransactOpts{
 		From:  common.HexToAddress(from),
 		Value: value,
@@ -31,6 +35,7 @@ func composeTxData(from string) (*bind.TransactOpts, error) {
 		},
 		Nonce: hexToBigInt(nonce),
 	}
+	fmt.Println("composeTxData after TransactOpts")
 	return opts, nil
 }
 
@@ -61,18 +66,20 @@ func PrepareTxAccountFactory(from, contract string) (*SimpleAccountFactory, *bin
 	if err != nil {
 		return nil, nil, err
 	}
-
+	fmt.Println("PrepareTxAccountFactory init")
 	contractAddress := common.HexToAddress(contract)
 	a, err := NewSimpleAccountFactory(contractAddress, conn)
+	fmt.Println("PrepareTxAccountFactory NewSimpleAccountFactory")
 
 	if err != nil {
 		return nil, nil, err
 	}
-
+	fmt.Println("PrepareTxAccountFactory before composeTxData")
 	txOpts, err := composeTxData(from)
 	if err != nil {
 		return nil, nil, err
 	}
+	fmt.Println("PrepareTxAccountFactory after composeTxData")
 
 	return a, txOpts, nil
 }

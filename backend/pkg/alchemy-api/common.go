@@ -12,6 +12,10 @@ var (
 	httpClient *resty.Client
 )
 
+func init() {
+	httpClient = resty.New()
+}
+
 type JsonRpcResp struct {
 	JSONRpc string                 `json:"jsonrpc"`
 	ID      int                    `json:"id"`
@@ -42,12 +46,15 @@ func GetNextNonce(from string) (string, error) {
 	if respData.Error != nil {
 		return "", fmt.Errorf("%v", respData.Error)
 	}
+	fmt.Println("GetNextNonce respData: ", respData)
 	return respData.Result, nil
 }
 
 func GetAPIURL() string {
 	apiKey := os.Getenv("ALCHEMY_API_KEY")
 
-	url := fmt.Sprintf("https://polygon-mainnet.g.alchemyapi.io/v2/%s/%s", apiKey, "")
+	// url := fmt.Sprintf("https://polygon-mainnet.g.alchemyapi.io/v2/%s/%s", apiKey, "")
+	url := fmt.Sprintf("https://polygon-mumbai.g.alchemyapi.io/v2/%s/%s", apiKey, "")
+
 	return url
 }
