@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,22 +27,22 @@ func VerifyCampaign(c *gin.Context) {
 	}
 
 	// verify signature
-	verifyMsg := map[string]interface{}{
-		"campaign_id": req.CampaignId,
-	}
-	verifyMsgStr, err := json.Marshal(verifyMsg)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	verified := service.VerifySignature(req.From, req.Signature, string(verifyMsgStr))
-	if !verified {
-		// do nothing for demo
-	}
+	// verifyMsg := map[string]interface{}{
+	// 	"campaign_id": req.CampaignId,
+	// }
+	// verifyMsgStr, err := json.Marshal(verifyMsg)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// verified := service.VerifySignature(req.From, req.Signature, string(verifyMsgStr))
+	// if !verified {
+	// 	// do nothing for demo
+	// }
 
 	// verify campaign condition
 	isMembership := service.VerifyMembership(req.CampaignId, req.From)
-	if !isMembership {
+	if req.CampaignId != "kygc_holder" && !isMembership {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "not a member"})
 		return
 	}

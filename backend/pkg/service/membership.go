@@ -7,13 +7,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/kryptogo/eth-tokyo-2023-kukuponpon/pkg/db"
 )
 
 func VerifyMembership(campaignID, from string) bool {
 	campaign := db.GetCampaign(campaignID)
-	members := getMembers(campaign.Query)
+	members := getMembers(campaignID, campaign.OperationName, campaign.Query)
 	for _, member := range members {
 		if member == from {
 			return true
@@ -22,9 +23,8 @@ func VerifyMembership(campaignID, from string) bool {
 	return false
 }
 
-func getMembers(query string) []string {
+func getMembers(campaignID, operationName, query string) []string {
 	variables := map[string]interface{}{}
-	operationName := "GetUserInteractedWithTokenAddress"
 
 	payload := struct {
 		Query         string                 `json:"query"`
@@ -49,7 +49,13 @@ func getMembers(query string) []string {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "application/json, multipart/mixed")
+	// req.Header.Set("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36")
+	req.Header.Set("accept", "application/json, multipart/mixed")
+	// req.Header.Set("authority", "api.airstack.xyz")
+	// req.Header.Set("sec-fetch-mode", "cors")
+	// req.Header.Set("origin", "https://app.airstack.xyz")
+	// req.Header.Set("referer", "https://app.airstack.xyz/")
+	// req.Header.Set("sec-ch-ua", `"Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"`)
 	req.Header.Set("Authorization", os.Getenv("AIRSTACK_API_KEY"))
 
 	client := &http.Client{}
@@ -64,8 +70,18 @@ func getMembers(query string) []string {
 	if err != nil {
 		fmt.Println("error:", err)
 		return nil
+	} else if strings.Contains(string(body), "errors") {
+		fmt.Println("error:", string(body))
+		return nil
 	}
-	addresses := getAddressesFromResp(body)
+
+	var addresses []string
+	if campaignID == "eth_global_tokyo_2023" {
+		addresses = getAddressesFromRespDapp(body)
+	} else {
+		addresses = getAddressesFromRespNFT(body)
+	}
+	fmt.Println("all members:", addresses)
 	return addresses
 }
 
@@ -84,7 +100,19 @@ type Response struct {
 	} `json:"data"`
 }
 
-func getAddressesFromResp(body []byte) []string {
+type ResponseNFT struct {
+	Data struct {
+		TokenBalances struct {
+			TokenBalance []struct {
+				Owner struct {
+					Addresses []string `json:"addresses"`
+				} `json:"owner"`
+			} `json:"TokenBalance"`
+		} `json:"TokenBalances"`
+	} `json:"data"`
+}
+
+func getAddressesFromRespDapp(body []byte) []string {
 	var response Response
 
 	err := json.Unmarshal(body, &response)
@@ -101,6 +129,25 @@ func getAddressesFromResp(body []byte) []string {
 		}
 		if to := tt.To.Addresses; to != nil {
 			for _, a := range to {
+				addresses = append(addresses, a)
+			}
+		}
+	}
+	return addresses
+}
+
+func getAddressesFromRespNFT(body []byte) []string {
+	var response ResponseNFT
+
+	err := json.Unmarshal(body, &response)
+	if err != nil {
+		panic(err)
+	}
+
+	var addresses []string
+	for _, tt := range response.Data.TokenBalances.TokenBalance {
+		if from := tt.Owner.Addresses; from != nil {
+			for _, a := range from {
 				addresses = append(addresses, a)
 			}
 		}

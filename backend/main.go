@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	appPort := "8081"
+	appPort := "8080"
 	r := gin.New()
 	r.Use(middleware.CorsMiddleware)
 	r.GET("/ok", api.GetOk)

@@ -14,7 +14,7 @@ import (
 )
 
 func GetCoupons(camapignId string) []string {
-	number := 6 // FIXME: get from db
+	number := 6 // TODO: get from db
 	coupons, newWallets := GenerateWallets(number)
 
 	// Generate 4337 wallets
@@ -47,7 +47,6 @@ func GenerateWallets(number int) ([]string, []string) {
 		// 4. Get 4337 Address from privateKey
 		ethereumAddress := crypto.PubkeyToAddress(*publicKey)
 		wallets = append(wallets, common.BytesToAddress(ethereumAddress.Bytes()).Hex())
-		// fmt.Printf("Ethereum Address: %s\n", common.BytesToAddress(ethereumAddress.Bytes()).Hex())
 	}
 	return coupons, wallets
 }

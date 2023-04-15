@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"math/big"
 )
 
@@ -12,6 +11,7 @@ type Campaign struct {
 	Sponsor           string   `json:"sponsor"`
 	Image             string   `json:"image"`
 	SponsorGas        big.Int  `json:"sponsor_gas"`
+	OperationName     string   `json:"operation_name"`
 }
 
 var Campaigns = []Campaign{
@@ -21,14 +21,15 @@ var Campaigns = []Campaign{
 			"Interacted with dapp 1inch at least 100 times",
 			"Total transaction amount exceeds 3000 USDC.",
 		},
-		Query: fmt.Sprintf(`
+		OperationName: "GetUserInteractedWithTokenAddress",
+		Query: `
 		query GetUserInteractedWithTokenAddress {
 			TokenTransfers(
 				input: {
 					filter: {
 						_or: [
-							{from: {_eq: "%s"}},
-							{to: {_eq: "%s"}}
+							{from: {_eq: "0x111111111117dC0aa78b770fA6A738034120C302"}},
+							{to: {_eq: "0x111111111117dC0aa78b770fA6A738034120C302"}}
 						]
 					},
 					blockchain: ethereum,
@@ -45,7 +46,7 @@ var Campaigns = []Campaign{
 				}
 			}
 		}
-	`, "0x111111111117dC0aa78b770fA6A738034120C302", "0x111111111117dC0aa78b770fA6A738034120C302"),
+	`,
 		Sponsor:    "1inch",
 		Image:      "https://1inch.io/assets/social-image/main-cover-2.png",
 		SponsorGas: *big.NewInt(500000000000000000), // 0.5
@@ -55,31 +56,22 @@ var Campaigns = []Campaign{
 		RequiredCondition: []string{
 			"Hold at least 1 KYGC token",
 		},
-		Query: fmt.Sprintf(`
-		query GetUserInteractedWithTokenAddress {
-			TokenTransfers(
-				input: {
-					filter: {
-						_or: [
-							{from: {_eq: "%s"}},
-							{to: {_eq: "%s"}}
-						]
-					},
-					blockchain: ethereum,
-					limit: 10
-				}
+		OperationName: "KGYCHoldersENSAndImages",
+		Query: `query KGYCHoldersENSAndImages {
+			TokenBalances(
+			  input: {filter: {tokenAddress: {_eq: "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"}, tokenType: {_in: [ERC1155, ERC721]}}, blockchain: polygon, limit: 100}
 			) {
-				TokenTransfer {
-					from {
-						addresses
-					}
-					to {
-						addresses
-					}
+			  TokenBalance {
+				owner {
+				  addresses
 				}
+			  }
+			  pageInfo {
+				nextCursor
+				prevCursor
+			  }
 			}
-		}
-	`, "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0", "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"),
+		  }`,
 		Sponsor:    "KryptoGO",
 		Image:      "https://twnewshub.com/wp-content/uploads/2021/12/Android-topic.png",
 		SponsorGas: *big.NewInt(500000000000000000), // 0.5
