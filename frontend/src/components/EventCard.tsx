@@ -107,7 +107,7 @@ const EventCard: React.FC<IEventCard> = ({
 
   return (
     <div
-      className="grayscaleBg w-[280px] h-[394px] border border-white rounded-[10px] flex items-center justify-center p-4 bg-cover bg-no-repeat"
+      className="grayscaleBg w-full h-full border border-white rounded-lg flex items-center justify-center bg-cover bg-no-repeat p-4"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}
