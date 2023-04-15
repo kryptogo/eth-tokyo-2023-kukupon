@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math/big"
 	"os"
+	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -21,12 +22,13 @@ func GetCoupons(camapignId string) []string {
 
 	// Generate 4337 wallets
 	newWallets4337 := GenerateWallets4337(newWallets)
-
+	fmt.Println("[GetCoupons] newWallets4337: ", newWallets4337)
 	// addToWhitelist to paymaster
 	for _, newWallet := range newWallets4337 {
 		paymasterAddress := os.Getenv("PAYMASTER_ADDRESS")
 		sponsorGas := camapign.SponsorGas
 		UpdatePayMaster(paymasterAddress, newWallet, sponsorGas)
+		time.Sleep(50 * time.Millisecond)
 	}
 	return coupons
 }
@@ -55,19 +57,16 @@ func GenerateWallets(number int) ([]string, []string) {
 func GenerateWallets4337(wallets []string) []string {
 	hostWalletAddress := os.Getenv("SIGNING_WALLET_ADDRESS")
 	SimpleAccountFactoryAddress := os.Getenv("SIMPLE_ACCOUNT_FACTORY_ADDRESS")
-	a, txOpts, err := PrepareTxAccountFactory(hostWalletAddress, SimpleAccountFactoryAddress)
+	a, _, err := PrepareTxAccountFactory(hostWalletAddress, SimpleAccountFactoryAddress)
 	if err != nil {
 		panic(err)
 	}
-	if txOpts == nil {
-		panic("txOpts is nil")
-	}
 
 	session := SimpleAccountFactorySession{
-		Contract:     a,
-		TransactOpts: *txOpts,
+		Contract: a,
+		// TransactOpts: *txOpts,
 	}
-	salt := big.NewInt(777)
+	salt := big.NewInt(0)
 	wallets4337 := []string{}
 	for _, wallet := range wallets {
 		walletAddress := common.HexToAddress(wallet)
@@ -105,13 +104,13 @@ func UpdatePayMaster(paymasterAddress, newAddress string, sponsorGas big.Int) {
 
 	newWalletAddress := common.HexToAddress(newAddress)
 	fmt.Println("[UpdatePayMaster] newWalletAddress", newWalletAddress)
-	_, err = session.AddToWhitelist(newWalletAddress, &sponsorGas)
-	fmt.Println("[UpdatePayMaster] after AddToWhitelist")
-
+	tx, err := session.AddToWhitelist(newWalletAddress, &sponsorGas)
 	if err != nil {
 		fmt.Println("AddToWhitelist error: ", err)
 		panic(err)
 	}
+	fmt.Println("[UpdatePayMaster] done, hash!!!:", tx.Hash().Hex())
+
 }
 
 func getRandomString() string {

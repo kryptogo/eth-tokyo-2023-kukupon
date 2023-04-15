@@ -9,11 +9,9 @@ import (
 var CorsMiddleware gin.HandlerFunc
 
 func init() {
-
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowMethods = []string{"OPTIONS", "HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Accept"}
-	corsConfig.AllowBrowserExtensions = true
-	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowOrigins = []string{"http://localhost:3000"}
 	CorsMiddleware = cors.New(corsConfig)
 }

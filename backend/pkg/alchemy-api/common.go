@@ -21,6 +21,8 @@ func init() {
 		panic(err)
 	}
 	Nonce = hexToBigInt(nonce)
+	fmt.Println("init from: ", os.Getenv("SIGNING_WALLET_ADDRESS"))
+	fmt.Println("init Nonce: ", Nonce)
 
 }
 

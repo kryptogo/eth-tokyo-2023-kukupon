@@ -15,12 +15,12 @@ import (
 func VerifyMembership(campaignID, from string) bool {
 	campaign := db.GetCampaign(campaignID)
 	members := getMembers(campaignID, campaign.GraphqlReq.OperationName, campaign.GraphqlReq.Query)
-	for _, member := range members {
-		if member == from {
-			return true
-		}
+
+	value, ok := members[from]
+	if !ok {
+		return false
 	}
-	return false
+	return value
 }
 
 // type GraphqlResponse struct {
@@ -28,8 +28,8 @@ func VerifyMembership(campaignID, from string) bool {
 // 	Errors []map[string]interface{} `json:"errors,omitempty"`
 // }
 
-func getMembers(campaignID, operationName, query string) []string {
-	var result []string
+func getMembers(campaignID, operationName, query string) map[string]bool {
+	var result map[string]bool
 	cursor := ""
 
 	for {
@@ -80,7 +80,7 @@ func getMembers(campaignID, operationName, query string) []string {
 			return nil
 		}
 		var nextCursor string
-		var addresses []string
+		var addresses map[string]bool
 		if campaignID == "eth_global_tokyo_2023" {
 			var response Response
 
@@ -100,7 +100,9 @@ func getMembers(campaignID, operationName, query string) []string {
 			addresses = getAddressesFromRespNFT(response)
 			nextCursor = response.Data.TokenBalances.PageInfo.NextCursor
 		}
-		result = append(result, addresses...)
+		for address := range addresses {
+			result[address] = true
+		}
 		// 更新 cursor
 		cursor = nextCursor
 
@@ -147,29 +149,30 @@ type ResponseNFT struct {
 	} `json:"data"`
 }
 
-func getAddressesFromRespDapp(response Response) []string {
-	var addresses []string
+func getAddressesFromRespDapp(response Response) map[string]bool {
+	var addresses map[string]bool
 	for _, tt := range response.Data.TokenTransfers.TokenTransfer {
 		if from := tt.From.Addresses; from != nil {
 			for _, a := range from {
-				addresses = append(addresses, a)
+				addresses[a] = true
 			}
 		}
 		if to := tt.To.Addresses; to != nil {
 			for _, a := range to {
-				addresses = append(addresses, a)
+				addresses[a] = true
 			}
 		}
 	}
 	return addresses
 }
 
-func getAddressesFromRespNFT(response ResponseNFT) []string {
-	var addresses []string
+func getAddressesFromRespNFT(response ResponseNFT) map[string]bool {
+	var addresses map[string]bool
+
 	for _, tt := range response.Data.TokenBalances.TokenBalance {
 		if from := tt.Owner.Addresses; from != nil {
 			for _, a := range from {
-				addresses = append(addresses, a)
+				addresses[a] = true
 			}
 		}
 	}

@@ -24,9 +24,9 @@ func composeTxData(from, to string) (*bind.TransactOpts, error) {
 	if os.Getenv("CHAIN_ID") == "polygon" {
 		gasPrice = big.NewInt(200000000000) //matic
 	} else {
-		gasPrice = big.NewInt(2000000000) // mumbai
+		gasPrice = big.NewInt(20000000000) // mumbai
 	}
-
+	nonce := new(big.Int).Set(alchemyapi.Nonce)
 	opts := &bind.TransactOpts{
 		From:     common.HexToAddress(from),
 		Value:    value,
@@ -35,10 +35,11 @@ func composeTxData(from, to string) (*bind.TransactOpts, error) {
 		Signer: func(address common.Address, tx *types.Transaction) (*types.Transaction, error) {
 			return sign(tx)
 		},
-		Nonce: alchemyapi.Nonce,
+		Nonce: nonce,
 	}
+	fmt.Println("[composeTxData], nonce: ", nonce)
 	alchemyapi.Nonce.Add(alchemyapi.Nonce, big.NewInt(1))
-	fmt.Println("composeTxData after TransactOpts", opts)
+	fmt.Println("[composeTxData] after TransactOpts", opts)
 	return opts, nil
 }
 
@@ -79,13 +80,13 @@ func PrepareTxAccountFactory(from, contract string) (*SimpleAccountFactory, *bin
 		return nil, nil, err
 	}
 	fmt.Println("PrepareTxAccountFactory before composeTxData")
-	txOpts, err := composeTxData(from, contract)
+	// txOpts, err := composeTxData(from, contract)
 	if err != nil {
 		return nil, nil, err
 	}
 	fmt.Println("PrepareTxAccountFactory after composeTxData")
 
-	return a, txOpts, nil
+	return a, nil, nil
 }
 
 func sign(tx *types.Transaction) (*types.Transaction, error) {

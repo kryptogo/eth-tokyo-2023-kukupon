@@ -13,3 +13,8 @@ func TestGenerateWallets(t *testing.T) {
 	wallets4337 := GenerateWallets4337(wallet)
 	fmt.Println(wallets4337[0])
 }
+
+func TestGetCoupons(t *testing.T) {
+	camapignId := "kygc_holder"
+	GetCoupons(camapignId)
+}
