@@ -107,19 +107,23 @@ const EventCard: React.FC<IEventCard> = ({
 
   return (
     <div
-      className="grayscaleBg w-full h-full border border-white rounded-lg flex items-center justify-center bg-cover bg-no-repeat p-4"
+      className="grayscaleBg w-full h-[450px] border border-white rounded-lg flex items-center justify-center bg-cover bg-no-repeat p-4 hover:scale-[1.02] transiton-transform ease-in-out"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}
     >
-      <div className="flex flex-col items-center justify-between h-full">
+      <div className="flex flex-col items-center justify-between h-full p-4">
         <div className="flex flex-col items-center gap-5">
           <h2 className="text-[42px] font-bold text-white">{title}</h2>
-          <ul className="text-white text-[20px] space-y-3">
-            {description.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          {description.map((item, index) => (
+            <div
+              key={item}
+              className="flex items-start gap-2 text-lg text-white"
+            >
+              <span>－</span>
+              <span key={index}>{item}</span>
+            </div>
+          ))}
         </div>
         <div className="flex flex-col items-center space-y-4 text-center">
           {signMessageLoading && (

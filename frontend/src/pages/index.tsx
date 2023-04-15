@@ -60,8 +60,8 @@ export default function Home() {
         </main>
       </div>
 
-      <div className="w-full h-screen py-6w-full min-h-screen py-6">
-        <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 xl:gap-8">
+      <div className="w-full h-screen min-h-screen py-6">
+        <div className="container grid grid-cols-1 gap-4 mx-auto sm:grid-cols-2 lg:grid-cols-4 lg:gap-6 xl:gap-8">
           {campaigns?.map((campaign) => (
             <EventCard
               id={campaign.id}

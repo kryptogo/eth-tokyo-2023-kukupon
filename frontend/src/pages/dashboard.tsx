@@ -20,7 +20,7 @@ const Dashboard = () => {
             backgroundImage: `url(${"https://crypto.news/app/uploads/2022/04/1inch.jpg"})`,
           }}
         ></div>
-        1Inch
+        KryptoGO
         <div className="bg-primary rounded-full h-2 w-full max-w-[240px] "></div>
       </div>
       <div className="h-12"></div>
