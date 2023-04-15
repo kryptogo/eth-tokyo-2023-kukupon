@@ -47,7 +47,7 @@ var Campaigns = []Campaign{
 			}
 		}
 	`, "0x111111111117dC0aa78b770fA6A738034120C302", "0x111111111117dC0aa78b770fA6A738034120C302"),
-		PaymasterAddress: "0x000",
+		PaymasterAddress: "0x000", //TODO:
 		Sponsor:          "1inch",
 		Image:            "https://1inch.io/assets/social-image/main-cover-2.png",
 		SponsorGas:       *big.NewInt(500000000000000000), // 0.5

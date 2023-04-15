@@ -58,14 +58,8 @@ func PrepareTx(from, newAddress, paymasterAddress string) (*WhitelistingPaymaste
 	return &session, nil
 }
 
-func AddToWhitelist(session WhitelistingPaymasterSession, newAddress string) (*types.Transaction, error) {
-	gas := big.NewInt(int64(10)) //TODO:
-	newWalletAddress := common.HexToAddress(newAddress)
-	return session.AddToWhitelist(newWalletAddress, gas)
-}
-
 func sign(tx *types.Transaction) (*types.Transaction, error) {
-	privateKeyStr := os.Getenv("PRIVATE_KEY")
+	privateKeyStr := os.Getenv("SIGNING_PRIVATE_KEY")
 	privateKey, err := parsePrivateKey(string(privateKeyStr))
 	if err != nil {
 		return nil, err

@@ -50,12 +50,12 @@ func GenerateWallets4337(privateKeys []*ecdsa.PrivateKey) []string {
 }
 
 func UpdatePayMaster(paymasterAddress, newAddress string, sponsorGas big.Int) {
-	// HOST_WALLET_ADDRESS = sponsorAddress
-	hostWalletAddress := os.Getenv("HOST_WALLET_ADDRESS")
+	hostWalletAddress := os.Getenv("SIGNING_WALLET_ADDRESS")
 	sesssion, err := PrepareTx(hostWalletAddress, newAddress, paymasterAddress)
 	if err != nil {
 		panic(err)
 	}
+
 	newWalletAddress := common.HexToAddress(newAddress)
 	_, err = sesssion.AddToWhitelist(newWalletAddress, &sponsorGas)
 	if err != nil {
