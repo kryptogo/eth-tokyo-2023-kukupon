@@ -99,7 +99,10 @@ const Redeem = () => {
             />
             <div className="absolute left-0 flex items-center justify-center w-full h-full p-4 font-bold text-center top-12 font-cartoon">
               <span>Tx Hash: </span>
-              <a href="" rel="_blank">
+              <a
+                href={`https://mumbai.polygonscan.com/tx/${userOperation.data}`}
+                rel="_blank"
+              >
                 {userOperation.data}
               </a>
             </div>
