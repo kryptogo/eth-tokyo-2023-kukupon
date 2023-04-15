@@ -48,7 +48,9 @@ export default function Home() {
           <div className="w-full h-full flex flex-col justify-center gap-[120px] max-w-[300px] md:max-w-[500px]">
             <div className="text-white font-cartoon">
               <div className="font-bold">
-                <div className="flex items-center justify-cneter"></div>
+                <div className="flex items-center justify-cneter">
+                  <LottieComponent></LottieComponent>
+                </div>
               </div>
 
               <h2 className="text-[24px]">
