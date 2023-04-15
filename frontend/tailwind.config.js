@@ -7,13 +7,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        cartoon: ['"M PLUS Rounded 1c"', "sans-serif"],
+      },
       colors: {
         primary: "#73D252",
       },
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        anime: "url('/images/anime.png')",
+      },
+      boxShadow: {
+        primary: "0px 1px 35px -13px #93EF74",
       },
     },
   },
