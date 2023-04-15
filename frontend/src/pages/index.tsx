@@ -1,17 +1,24 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount, useSignMessage } from "wagmi";
 
 import Button from "@/components/Button";
 import EventCard from "@/components/EventCard";
 
 import kukuponpon from "/public/images/kukuponpon.png";
 import ape from "/public/images/ape.png";
+import { useCampaigns } from "@/service/campaign";
 
 export default function Home() {
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const { data: campaigns, isLoading } = useCampaigns();
+
+  console.log(campaigns);
+
   return (
     <div className="w-full h-screen bg-[#212121] bg-anime bg-no-repeat bg-right">
-      <div className="container mx-auto h-full">
+      <div className="container h-full mx-auto">
         <header className="h-[100px] flex justify-end items-center">
           <ConnectButton />
         </header>
@@ -41,41 +48,15 @@ export default function Home() {
 
       <div className="w-full h-screen py-6">
         <div className="container mx-auto grid grid-flow-row grid-cols-4 gap-[20px]">
-          <EventCard
-            title="123"
-            description={["123", "456"]}
-            backgroundImage={ape.src}
-          />
-          <EventCard
-            title="123"
-            description={["123", "456"]}
-            backgroundImage={ape.src}
-          />
-          <EventCard
-            title="123"
-            description={["123", "456"]}
-            backgroundImage={ape.src}
-          />
-          <EventCard
-            title="123"
-            description={["123", "456"]}
-            backgroundImage={ape.src}
-          />
-          <EventCard
-            title="123"
-            description={["123", "456"]}
-            backgroundImage={ape.src}
-          />
-          <EventCard
-            title="123"
-            description={["123", "456"]}
-            backgroundImage={ape.src}
-          />
-          <EventCard
-            title="123"
-            description={["123", "456"]}
-            backgroundImage={ape.src}
-          />
+          {campaigns?.map((campaign) => (
+            <EventCard
+              id={campaign.id}
+              key={campaign.id}
+              title={campaign.sponsor}
+              description={campaign.required_condition}
+              backgroundImage={campaign.image_url}
+            />
+          ))}
         </div>
       </div>
     </div>
