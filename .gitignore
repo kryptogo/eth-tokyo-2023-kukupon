@@ -45,3 +45,5 @@ headless/kg-wallet-backend
 config/local.env
 /gcloud/run/*.yaml
 config/local.sh
+
+node_modules
