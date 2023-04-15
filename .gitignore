@@ -1,0 +1,46 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+
+# Project specific file
+build/**
+/gosec.log
+/.git-credentials
+/.test-key
+data/*
+localonly_*.go
+local_test
+private/
+res/*
+!res/lang
+!res/clef
+!res/liquibase
+!res/mock-firebase
+diff.mysql.sql
+kryptogo-wallet-app-*.json
+pkg/db/model/databasechangelog.gen.go
+pkg/db/model/databasechangeloglock.gen.go
+
+# gin
+gin-bin
+main
+
+# headless - another build for app engine
+headless/config
+headless/kg-wallet-backend
+
+config/local.env
+/gcloud/run/*.yaml
