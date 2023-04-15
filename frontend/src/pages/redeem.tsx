@@ -10,16 +10,16 @@ import { TxInfo, sendUserOperation } from "@/service/useOperation";
 const Redeem = () => {
   const [code, setCode] = useState<string>("");
   const [modal, setModal] = useState(false);
-
+  const [redeemed, setRedeemed] = useState(false);
   const address = useRedeemCode(code);
 
   const handleRedeem = () => {
-    localStorage.setItem("code", code);
-
     setModal(true);
 
     setTimeout(() => {
       setModal(false);
+      setRedeemed(true);
+      localStorage.setItem("code", code);
     }, 2000);
   };
 
@@ -27,7 +27,6 @@ const Redeem = () => {
 
   useEffect(() => {
     if (!address) return;
-    console.log(address);
   }, [address]);
 
   return (
@@ -67,7 +66,7 @@ const Redeem = () => {
 
       {modal && (
         <div className="absolute top-0 flex items-center justify-center w-full h-full loading text-secondaryPink text-cartoon">
-          <div className="absolute top-0 w-full h-full bg-black opacity-70"></div>
+          <div className="absolute top-0 z-10 w-full h-full bg-black opacity-80"></div>
           <div className="rounded-[10px] bg-white z-10 flex relative w-64 h-72">
             <Image
               src="/images/loading_girl.png"
@@ -85,64 +84,66 @@ const Redeem = () => {
         </div>
       )}
 
-      <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
-        <div>
-          <h1 className="text-[84px] font-black font-cartoon">DONDONKI</h1>
-          <h1 className="text-[84px] font-black font-cartoon">
-            CUTEEEEE GAMEFI
-          </h1>
-        </div>
-
-        <div className="relative">
-          <input
-            value={code}
-            type="text"
-            onChange={(e) => setCode(e.target.value)}
-            className="rounded-[10px] w-[457px] h-[81px] bg-[#D9D9D9] pl-[125px]"
-          />
-          <Image
-            src="/images/kukupon.png"
-            width={120}
-            height={120}
-            alt="kukupon"
-            className="absolute -translate-y-1/2 left-4 top-1/2"
-          />
-        </div>
-
-        <button
-          className="w-[142px] h-[37px] rounded-[10px] bg-secondaryPink text-white"
-          onClick={handleRedeem}
-        >
-          Play Now
-        </button>
-      </main>
-
       {/* FOR MINT NFT */}
-      <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
-        <div>
-          <h1 className="text-[84px] font-black font-cartoon">All Done</h1>
-          <h4 className="text-[24px] font-black font-cartoon">
-            Just Have fun Try Mint your first **FREE** NFT (for real 😎)
-          </h4>
-        </div>
+      {!redeemed ? (
+        <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
+          <div>
+            <h1 className="text-[84px] font-black font-cartoon">DONDONKI</h1>
+            <h1 className="text-[84px] font-black font-cartoon">
+              CUTEEEEE GAMEFI
+            </h1>
+          </div>
 
-        <TapME></TapME>
+          <div className="relative">
+            <input
+              value={code}
+              type="text"
+              onChange={(e) => setCode(e.target.value)}
+              className="rounded-[10px] w-[457px] h-[81px] bg-[#D9D9D9] pl-[125px] pr-[24px]"
+            />
+            <Image
+              src="/images/kukupon.png"
+              width={120}
+              height={120}
+              alt="kukupon"
+              className="absolute -translate-y-1/2 left-4 top-1/2"
+            />
+          </div>
 
-        <button
-          className="w-[401px] h-[88px] font-cartoon rounded-[10px] bg-secondaryPink font-black text-white text-[32px]"
-          onClick={() => {
-            userOperation.mutate({
-              code: localStorage.getItem("code")!,
-              txInfo: {
-                target: "",
-                data: "",
-              },
-            });
-          }}
-        >
-          Mint NFT
-        </button>
-      </main>
+          <button
+            className="w-[142px] h-[37px] rounded-[10px] bg-secondaryPink text-white"
+            onClick={handleRedeem}
+          >
+            Play Now
+          </button>
+        </main>
+      ) : (
+        <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
+          <div>
+            <h1 className="text-[84px] font-black font-cartoon">All Done</h1>
+            <h4 className="text-[24px] font-black font-cartoon">
+              Just Have fun Try Mint your first **FREE** NFT (for real 😎)
+            </h4>
+          </div>
+
+          <TapME></TapME>
+
+          <button
+            className="w-[401px] h-[88px] font-cartoon rounded-[10px] bg-secondaryPink font-black text-white text-[32px]"
+            onClick={() => {
+              userOperation.mutate({
+                code: localStorage.getItem("code")!,
+                txInfo: {
+                  target: "",
+                  data: "",
+                },
+              });
+            }}
+          >
+            Mint NFT
+          </button>
+        </main>
+      )}
     </div>
   );
 };
