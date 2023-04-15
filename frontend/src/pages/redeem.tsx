@@ -134,8 +134,8 @@ const Redeem = () => {
               userOperation.mutate({
                 code: localStorage.getItem("code")!,
                 txInfo: {
-                  target: "",
-                  data: "",
+                  target: "0xa1b8bB49Bd53D2D68Ed48Fd5E346d06DEE4FF910",
+                  data: "0x40d097c3000000000000000000000000" + strip0x(address),
                 },
               });
             }}
@@ -147,5 +147,12 @@ const Redeem = () => {
     </div>
   );
 };
+
+function strip0x(s: string): string {
+  if (s.startsWith("0x")) {
+    return s.slice(2);
+  }
+  return s;
+}
 
 export default Redeem;
