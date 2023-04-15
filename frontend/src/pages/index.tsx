@@ -1,14 +1,12 @@
-import { ConnectButton } from "@kryptogo/kryptogokit";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 
 import Button from "@/components/Button";
 import EventCard from "@/components/EventCard";
-
 import { LottieComponent } from "@/components/LottieLogo";
 import { useCampaigns } from "@/service/campaign";
 
 export default function Home() {
-  const { address, isConnecting, isDisconnected } = useAccount();
   const { data: campaigns, isLoading } = useCampaigns();
 
   function scrollToNext() {

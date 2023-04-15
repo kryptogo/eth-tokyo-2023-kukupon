@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+
 import Image from "next/image";
 import { ConnectButton } from "@kryptogo/kryptogokit";
 import useRedeemCode from "@/hooks/useRedeemCode";
+import TapME from "@/components/Tapme";
+import { TxInfo, sendUserOperation } from "@/service/useOperation";
 
 const Redeem = () => {
   const [code, setCode] = useState<string>("");
+  const [modal, setModal] = useState(false);
 
-  const { address } = useRedeemCode(code);
+  const address = useRedeemCode(code);
 
   const handleRedeem = () => {
     localStorage.setItem("code", code);
+
+    setModal(true);
+
+    setTimeout(() => {
+      setModal(false);
+    }, 2000);
   };
+
+  const userOperation = useMutation(sendUserOperation);
 
   useEffect(() => {
     if (!address) return;
+    console.log(address);
   }, [address]);
 
   return (
@@ -51,6 +65,26 @@ const Redeem = () => {
         <ConnectButton />
       </header>
 
+      {modal && (
+        <div className="absolute top-0 flex items-center justify-center w-full h-full loading text-secondaryPink text-cartoon">
+          <div className="absolute top-0 w-full h-full bg-black opacity-70"></div>
+          <div className="rounded-[10px] bg-white z-10 flex relative w-64 h-72">
+            <Image
+              src="/images/loading_girl.png"
+              width={180}
+              height={120}
+              style={{ top: -100, left: 40 }}
+              alt="kukupon"
+              className="absolute "
+            />
+            <div className="absolute left-0 flex items-center justify-center w-full h-full p-4 font-bold text-center top-12 font-cartoon">
+              We are creating your wallet. Give me a second I’ll give you a new
+              world
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
         <div>
           <h1 className="text-[84px] font-black font-cartoon">DONDONKI</h1>
@@ -84,7 +118,7 @@ const Redeem = () => {
       </main>
 
       {/* FOR MINT NFT */}
-      {/* <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
+      <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
         <div>
           <h1 className="text-[84px] font-black font-cartoon">All Done</h1>
           <h4 className="text-[24px] font-black font-cartoon">
@@ -92,31 +126,23 @@ const Redeem = () => {
           </h4>
         </div>
 
-        <TapMe></TapMe>
+        <TapME></TapME>
 
-        <button className="w-[401px] h-[88px] font-cartoon rounded-[10px] bg-secondaryPink font-black text-white text-[32px]">
+        <button
+          className="w-[401px] h-[88px] font-cartoon rounded-[10px] bg-secondaryPink font-black text-white text-[32px]"
+          onClick={() => {
+            userOperation.mutate({
+              code: localStorage.getItem("code")!,
+              txInfo: {
+                target: "",
+                data: "",
+              },
+            });
+          }}
+        >
           Mint NFT
         </button>
-      </main> */}
-
-      {/* FOR LOADING STATE*/}
-      {/* <div className="absolute top-0 flex items-center justify-center w-full h-full loading text-secondaryPink text-cartoon">
-        <div className="absolute top-0 w-full h-full bg-black opacity-70"></div>
-        <div className="rounded-[10px] bg-white z-10 flex relative w-64 h-72">
-          <Image
-            src="/images/loading_girl.png"
-            width={180}
-            height={120}
-            style={{ top: -100, left: 40 }}
-            alt="kukupon"
-            className="absolute "
-          />
-          <div className="absolute left-0 flex items-center justify-center w-full h-full p-4 font-bold text-center top-12 font-cartoon">
-            We are creating your wallet. Give me a second I’ll give you a new
-            world
-          </div>
-        </div>
-      </div> */}
+      </main>
     </div>
   );
 };

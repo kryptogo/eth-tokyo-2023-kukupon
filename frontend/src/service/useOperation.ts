@@ -22,14 +22,17 @@ const provider = new ethers.providers.JsonRpcProvider(config.rpcUrl, {
 });
 const paymasterAPI = getWhitelistingPaymaster();
 
-type TxInfo = {
+export type TxInfo = {
   target: string;
   value?: string;
   data: string;
 };
 
-export const sendUserOperation = async (code: string, txInfo: TxInfo) => {
-  const signingKey = getKeyFromCoupon(code);
+export const sendUserOperation = async (data: {
+  code: string;
+  txInfo: TxInfo;
+}) => {
+  const signingKey = getKeyFromCoupon(data.code);
   const accountAPI = getSimpleAccount(
     provider,
     signingKey,
@@ -39,7 +42,7 @@ export const sendUserOperation = async (code: string, txInfo: TxInfo) => {
   );
 
   const op = await accountAPI.createSignedUserOp({
-    ...txInfo,
+    ...data.txInfo,
     ...(await getGasFee(provider)),
   });
 
