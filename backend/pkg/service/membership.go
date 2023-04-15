@@ -13,7 +13,7 @@ import (
 
 func VerifyMembership(campaignID, from string) bool {
 	campaign := db.GetCampaign(campaignID)
-	members := getMembers(campaign.RequiredCondition)
+	members := getMembers(campaign.Query)
 	for _, member := range members {
 		if member == from {
 			return true

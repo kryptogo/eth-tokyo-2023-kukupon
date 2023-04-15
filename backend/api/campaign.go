@@ -30,7 +30,6 @@ func VerifyCampaign(c *gin.Context) {
 	// verify signature
 	verifyMsg := map[string]interface{}{
 		"campaign_id": req.CampaignId,
-		"from":        req.From,
 	}
 	verifyMsgStr, err := json.Marshal(verifyMsg)
 	if err != nil {
@@ -39,18 +38,45 @@ func VerifyCampaign(c *gin.Context) {
 	}
 	verified := service.VerifySignature(req.From, req.Signature, string(verifyMsgStr))
 	if !verified {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid signature"})
-		return
+		// do nothing for demo
 	}
 
 	// verify campaign condition
 	isMembership := service.VerifyMembership(req.CampaignId, req.From)
-	c.JSON(http.StatusOK, gin.H{
-		"verified": isMembership,
-	})
+	if !isMembership {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "not a member"})
+		return
+	}
+
+	c.SetCookie("verified_membership", "cookie_value", 3600, "/", "localhost", false, true)
+	c.String(http.StatusOK, "ok")
 }
 
-// RetrieveCoupon retrieve coupon
+type RetrieveCouponReq struct {
+	CampaignId string `json:"campaign_id"`
+}
+
+// RetrieveCoupon retrieve coupon, the string can convert to a private key
 func RetrieveCoupon(c *gin.Context) {
-	c.String(http.StatusOK, "coupon")
+	// verify cookie
+	cookieVakue, err := c.Cookie("verified_membership")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if cookieVakue != "cookie_value" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid cookie"})
+		return
+	}
+
+	var req RetrieveCouponReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// coupons := service.GetCoupons(req.CampaignId)
+
+	// c.JSON(http.StatusOK, gin.H{
+	// 	"coupons": coupons,
+	// })
 }
