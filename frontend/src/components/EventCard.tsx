@@ -6,6 +6,7 @@ import { useAccount, useSignMessage } from "wagmi";
 
 import useCouponStore from "@/store/useCouponStore";
 import Button from "./Button";
+import { useRouter } from "next/router";
 
 interface IEventCard {
   id: string;
@@ -27,6 +28,7 @@ const EventCard: React.FC<IEventCard> = ({
   backgroundImage,
 }) => {
   const { open, setOpen } = useIDKit();
+  const router = useRouter();
   const { address, isConnecting, isDisconnected } = useAccount();
   const [addCoupons] = useCouponStore((state) => [state.addCoupons]);
 
@@ -97,15 +99,15 @@ const EventCard: React.FC<IEventCard> = ({
   useEffect(() => {
     if (!getCouponSuccess) return;
 
-    console.log(coupons);
-    // addCoupons(id, coupons.coupons);
+    addCoupons(title, coupons.coupons);
+    router.push("/dashboard");
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCouponSuccess]);
 
   return (
     <div
-      className="grayscaleBg w-[280px] h-[394px] border border-white rounded-[10px] flex items-center justify-center p-4 bg-contain bg-no-repeat"
+      className="grayscaleBg w-full h-full border border-white rounded-lg flex items-center justify-center bg-cover bg-no-repeat p-4"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}

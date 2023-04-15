@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 interface CouponState {
-  coupons: Map<string, string[]>;
+  coupons: Record<string, string[]>;
   addCoupons: (id: string, codes: string[]) => void;
 }
 
@@ -10,12 +10,15 @@ const useCouponStore = create<CouponState>()(
   devtools(
     persist(
       (set) => ({
-        coupons: new Map(),
+        coupons: {},
 
-        addCoupons: (id: string, codes: string[]) =>
+        addCoupons: (title: string, codes: string[]) =>
           set((state) => ({
             ...state,
-            coupons: new Map(state.coupons).set(id, codes),
+            coupons: {
+              ...state.coupons,
+              [title]: codes,
+            },
           })),
       }),
       {
