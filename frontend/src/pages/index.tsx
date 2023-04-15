@@ -1,11 +1,11 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { ConnectButton } from "@kryptogo/kryptogokit";
+import { useAccount } from "wagmi";
 
-import Button from '@/components/Button';
-import EventCard from '@/components/EventCard';
+import Button from "@/components/Button";
+import EventCard from "@/components/EventCard";
 
-import { LottieComponent } from '@/components/LottieLogo';
-import { useCampaigns } from '@/service/campaign';
+import { LottieComponent } from "@/components/LottieLogo";
+import { useCampaigns } from "@/service/campaign";
 
 export default function Home() {
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -54,10 +54,10 @@ export default function Home() {
               </div>
 
               <h2 className="text-[24px]">
-                Maximize your gamefi time and minimize gas fees with our coupons
+                Where Gift Cards Meet Blockchain Gaming
               </h2>
             </div>
-            <Button onClick={scrollToNext} text="Become a PON Master" />
+            <Button onClick={scrollToNext} text="Claim Your First Coupon" />
           </div>
         </main>
       </div>
