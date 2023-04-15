@@ -1,20 +1,45 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useSignMessage } from "wagmi";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Image from 'next/image';
+import { useAccount } from 'wagmi';
 
-import Button from "@/components/Button";
-import EventCard from "@/components/EventCard";
+import Button from '@/components/Button';
+import EventCard from '@/components/EventCard';
 
-import kukuponpon from "/public/images/kukuponpon.png";
-import ape from "/public/images/ape.png";
-import { useCampaigns } from "@/service/campaign";
+import { useCampaigns } from '@/service/campaign';
+import kukuponpon from '/public/images/kukuponpon.png';
 
 export default function Home() {
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data: campaigns, isLoading } = useCampaigns();
 
   console.log(campaigns);
+
+  function scrollToNext() {
+    const duration = 300; // duration of the animation in milliseconds
+    const targetPosition = window.scrollY + window.innerHeight; // calculate the target position of the scroll
+
+    function easeInOutQuad(t: number) {
+      // easing function for smooth animation
+      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    function animateScroll(timestamp: number) {
+      const elapsedTime = timestamp - startTime;
+      const newPosition =
+        easeInOutQuad(elapsedTime / duration) *
+          (targetPosition - startPosition) +
+        startPosition;
+      window.scrollTo(0, newPosition);
+
+      if (elapsedTime < duration) {
+        window.requestAnimationFrame(animateScroll);
+      }
+    }
+
+    const startTime = performance.now();
+    const startPosition = window.scrollY;
+    window.requestAnimationFrame(animateScroll);
+  }
 
   return (
     <div className="w-full h-screen bg-[#212121] bg-anime bg-no-repeat bg-right">
@@ -41,7 +66,7 @@ export default function Home() {
                 Maximize your gamefi time and minimize gas fees with our coupons
               </h2>
             </div>
-            <Button text="Become a PON Master" />
+            <Button onClick={scrollToNext} text="Become a PON Master" />
           </div>
         </main>
       </div>
