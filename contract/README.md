@@ -11,3 +11,13 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
+
+## Env Variable
+
+Setup following env variable in `.env`
+
+```text
+MUMBAI_API_KEY=
+POLYGON_API_KEY=
+PRIVATE_KEY=
+```
