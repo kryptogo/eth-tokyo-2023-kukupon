@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
+	"fmt"
 	"math/big"
 	"os"
 
@@ -14,7 +15,8 @@ import (
 )
 
 func GetCoupons(camapignId string) []string {
-	number := 6 // TODO: get from db
+	camapign := db.GetCampaign(camapignId)
+	number := camapign.CouponAmount
 	coupons, newWallets := GenerateWallets(number)
 
 	// Generate 4337 wallets
@@ -22,7 +24,6 @@ func GetCoupons(camapignId string) []string {
 
 	// addToWhitelist to paymaster
 	for _, newWallet := range newWallets4337 {
-		camapign := db.GetCampaign(camapignId)
 		paymasterAddress := os.Getenv("PAYMASTER_ADDRESS")
 		sponsorGas := camapign.SponsorGas
 		UpdatePayMaster(paymasterAddress, newWallet, sponsorGas)
@@ -34,7 +35,7 @@ func GenerateWallets(number int) ([]string, []string) {
 	coupons := []string{}
 	wallets := []string{}
 	for i := 0; i < number; i++ {
-		randomString := "123" //getRandomString()
+		randomString := getRandomString()
 		coupons = append(coupons, randomString)
 
 		// 2. Hash the random string using SHA-256 to create a private key
@@ -80,23 +81,35 @@ func GenerateWallets4337(wallets []string) []string {
 }
 
 func UpdatePayMaster(paymasterAddress, newAddress string, sponsorGas big.Int) {
+	fmt.Println("[UpdatePayMaster] begin")
 	hostWalletAddress := os.Getenv("SIGNING_WALLET_ADDRESS")
 	a, txOpts, err := PrepareTxPayment(hostWalletAddress, paymasterAddress)
 	if err != nil {
+		fmt.Println("PrepareTxPayment error: ", err)
 		panic(err)
 	}
+	fmt.Println("[UpdatePayMaster] after PrepareTxPayment")
 
 	session := WhitelistingPaymasterSession{
 		Contract:     a,
 		TransactOpts: *txOpts,
 	}
+	fmt.Println("[UpdatePayMaster] WhitelistingPaymasterSession Contract", a)
+	fmt.Println("[UpdatePayMaster] WhitelistingPaymasterSession TransactOpts", *txOpts)
+
+	fmt.Println("[UpdatePayMaster] after session")
+
 	if err != nil {
 		panic(err)
 	}
 
 	newWalletAddress := common.HexToAddress(newAddress)
+	fmt.Println("[UpdatePayMaster] newWalletAddress", newWalletAddress)
 	_, err = session.AddToWhitelist(newWalletAddress, &sponsorGas)
+	fmt.Println("[UpdatePayMaster] after AddToWhitelist")
+
 	if err != nil {
+		fmt.Println("AddToWhitelist error: ", err)
 		panic(err)
 	}
 }

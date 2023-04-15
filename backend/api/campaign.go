@@ -58,15 +58,15 @@ type RetrieveCouponReq struct {
 // RetrieveCoupon retrieve coupon, the string can convert to a private key
 func RetrieveCoupon(c *gin.Context) {
 	// verify cookie
-	cookieVakue, err := c.Cookie("verified_membership")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	if cookieVakue != "cookie_value" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid cookie"})
-		return
-	}
+	// cookieVakue, err := c.Cookie("verified_membership")
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// if cookieVakue != "cookie_value" {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "invalid cookie"})
+	// 	return
+	// }
 
 	var req RetrieveCouponReq
 	if err := c.ShouldBindJSON(&req); err != nil {

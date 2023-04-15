@@ -17,6 +17,7 @@ type Campaign struct {
 	Image             string         `json:"image"`
 	SponsorGas        big.Int        `json:"sponsor_gas"`
 	GraphqlReq        GraphqlRequest `json:"graphql_req"`
+	CouponAmount      int            `json:"coupon_amount"`
 }
 
 var Campaigns = []Campaign{
@@ -54,9 +55,10 @@ var Campaigns = []Campaign{
 	`,
 			OperationName: "GetUserInteractedWithTokenAddress",
 		},
-		Sponsor:    "1inch",
-		Image:      "https://1inch.io/assets/social-image/main-cover-2.png",
-		SponsorGas: *big.NewInt(500000000000000000), // 0.5
+		Sponsor:      "1inch",
+		Image:        "https://1inch.io/assets/social-image/main-cover-2.png",
+		SponsorGas:   *big.NewInt(500000000000000000), // 0.5
+		CouponAmount: 10,
 	},
 	{
 		ID: "kygc_holder",
@@ -84,8 +86,8 @@ var Campaigns = []Campaign{
 		Sponsor: "KryptoGO",
 		Image:   "https://twnewshub.com/wp-content/uploads/2021/12/Android-topic.png",
 		// SponsorGas: *big.NewInt(500000000000000000), // 0.5 matic
-		SponsorGas: *big.NewInt(10000000000000000), // 0.01 mumbai
-
+		SponsorGas:   *big.NewInt(10000000000000000), // 0.01 mumbai //TODO:
+		CouponAmount: 3,
 	},
 }
 

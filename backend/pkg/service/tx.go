@@ -15,27 +15,30 @@ import (
 	alchemyapi "github.com/kryptogo/eth-tokyo-2023-kukuponpon/pkg/alchemy-api"
 )
 
-func composeTxData(from string) (*bind.TransactOpts, error) {
+func composeTxData(from, to string) (*bind.TransactOpts, error) {
 	value := big.NewInt(0) // nft transfer value is 0
 	fmt.Println("composeTxData before GetNextNonce")
-	nonce, err := alchemyapi.GetNextNonce(from)
-	if err != nil {
-		return nil, err
-	}
+
 	fmt.Println("composeTxData after GetNextNonce")
+	var gasPrice *big.Int
+	if os.Getenv("CHAIN_ID") == "polygon" {
+		gasPrice = big.NewInt(200000000000) //matic
+	} else {
+		gasPrice = big.NewInt(2000000000) // mumbai
+	}
 
 	opts := &bind.TransactOpts{
-		From:  common.HexToAddress(from),
-		Value: value,
-		// GasPrice: big.NewInt(200000000000), //matic
-		GasPrice: big.NewInt(2000000000), // mumbai
+		From:     common.HexToAddress(from),
+		Value:    value,
+		GasPrice: gasPrice,
 		GasLimit: 200000,
 		Signer: func(address common.Address, tx *types.Transaction) (*types.Transaction, error) {
 			return sign(tx)
 		},
-		Nonce: hexToBigInt(nonce),
+		Nonce: alchemyapi.Nonce,
 	}
-	fmt.Println("composeTxData after TransactOpts")
+	alchemyapi.Nonce.Add(alchemyapi.Nonce, big.NewInt(1))
+	fmt.Println("composeTxData after TransactOpts", opts)
 	return opts, nil
 }
 
@@ -47,12 +50,13 @@ func PrepareTxPayment(from, contract string) (*WhitelistingPaymaster, *bind.Tran
 	}
 
 	contractAddress := common.HexToAddress(contract)
+	fmt.Println("[PrepareTxPayment] contractAddress: ", contractAddress.Hex())
 	a, err := NewWhitelistingPaymaster(contractAddress, conn)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	txOpts, err := composeTxData(from)
+	txOpts, err := composeTxData(from, contract)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -75,7 +79,7 @@ func PrepareTxAccountFactory(from, contract string) (*SimpleAccountFactory, *bin
 		return nil, nil, err
 	}
 	fmt.Println("PrepareTxAccountFactory before composeTxData")
-	txOpts, err := composeTxData(from)
+	txOpts, err := composeTxData(from, contract)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -90,8 +94,13 @@ func sign(tx *types.Transaction) (*types.Transaction, error) {
 	if err != nil {
 		return nil, err
 	}
+	var chainIDBigInt *big.Int
+	if os.Getenv("CHAIN_ID") == "polygon" {
+		chainIDBigInt = big.NewInt(137)
+	} else {
+		chainIDBigInt = big.NewInt(80001)
+	}
 
-	chainIDBigInt := big.NewInt(137)
 	signer := types.NewLondonSigner(chainIDBigInt)
 	return types.SignTx(tx, signer, privateKey)
 }
