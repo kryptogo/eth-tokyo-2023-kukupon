@@ -68,6 +68,35 @@ var Campaigns = []Campaign{
 		GraphqlReq: GraphqlRequest{
 			Query: `query KGYCHoldersENSAndImages {
 			TokenBalances(
+			  input: {filter: {tokenAddress: {_eq: "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"}, tokenType: {_in: [ERC1155, ERC721]}}, blockchain: polygon, limit: 49x, cursor: __REPLACE__}
+			) {
+			  TokenBalance {
+				owner {
+				  addresses
+				}
+			  }
+			  pageInfo {
+				nextCursor
+				prevCursor
+			  }
+			}
+		  }`,
+			OperationName: "KGYCHoldersENSAndImages",
+		},
+		Sponsor: "KryptoGO",
+		Image:   "https://twnewshub.com/wp-content/uploads/2021/12/Android-topic.png",
+		// SponsorGas: *big.NewInt(500000000000000000), // 0.5 matic
+		SponsorGas:   *big.NewInt(18000000000000000), // 0.01 mumbai //TODO:
+		CouponAmount: 1,
+	},
+	{
+		ID: "dev",
+		RequiredCondition: []string{
+			"Hold at least 1 KYGC token",
+		},
+		GraphqlReq: GraphqlRequest{
+			Query: `query KGYCHoldersENSAndImages {
+			TokenBalances(
 			  input: {filter: {tokenAddress: {_eq: "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"}, tokenType: {_in: [ERC1155, ERC721]}}, blockchain: polygon, limit: 30}
 			) {
 			  TokenBalance {

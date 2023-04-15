@@ -41,10 +41,12 @@ func VerifyCampaign(c *gin.Context) {
 	// }
 
 	// verify campaign condition
-	isMembership := service.VerifyMembership(req.CampaignId, req.From)
-	if req.CampaignId != "kygc_holder" && !isMembership {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "not a member"})
-		return
+	if req.CampaignId != "dev" {
+		isMembership := service.VerifyMembership(req.CampaignId, req.From)
+		if !isMembership {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "not a member"})
+			return
+		}
 	}
 
 	c.SetCookie("verified_membership", "cookie_value", 3600, "/", "localhost", false, true)

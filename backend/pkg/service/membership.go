@@ -16,7 +16,7 @@ func VerifyMembership(campaignID, from string) bool {
 	campaign := db.GetCampaign(campaignID)
 	members := getMembers(campaignID, campaign.GraphqlReq.OperationName, campaign.GraphqlReq.Query)
 
-	value, ok := members[from]
+	value, ok := members[strings.ToLower(from)]
 	if !ok {
 		return false
 	}
@@ -29,24 +29,24 @@ func VerifyMembership(campaignID, from string) bool {
 // }
 
 func getMembers(campaignID, operationName, query string) map[string]bool {
-	var result map[string]bool
+	result := map[string]bool{}
 	cursor := ""
-
 	for {
-		variables := map[string]interface{}{
-			"cursor": "",
-		}
+
+		// fmt.Println("[getMembers] cursor:", cursor)
+		newquery := strings.Replace(query, "__REPLACE__", `"`+cursor+`"`, 1)
+		variables := map[string]interface{}{}
 
 		payload := struct {
 			Query         string                 `json:"query"`
 			Variables     map[string]interface{} `json:"variables"`
 			OperationName string                 `json:"operationName"`
 		}{
-			Query:         query,
+			Query:         newquery,
 			Variables:     variables,
 			OperationName: operationName,
 		}
-
+		// fmt.Println("[getMembers] payload:", payload)
 		requestBody, err := json.Marshal(payload)
 		if err != nil {
 			fmt.Println("error:", err)
@@ -101,18 +101,18 @@ func getMembers(campaignID, operationName, query string) map[string]bool {
 			nextCursor = response.Data.TokenBalances.PageInfo.NextCursor
 		}
 		for address := range addresses {
-			result[address] = true
+			result[strings.ToLower(address)] = true
 		}
+
 		// 更新 cursor
 		cursor = nextCursor
-
 		// 如果沒有下一頁了，結束 loop
 		if cursor == "" {
 			break
 		}
 	}
 
-	fmt.Println("all members:", result)
+	fmt.Println("members size:", len(result))
 	return result
 }
 
@@ -150,7 +150,8 @@ type ResponseNFT struct {
 }
 
 func getAddressesFromRespDapp(response Response) map[string]bool {
-	var addresses map[string]bool
+	addresses := map[string]bool{}
+
 	for _, tt := range response.Data.TokenTransfers.TokenTransfer {
 		if from := tt.From.Addresses; from != nil {
 			for _, a := range from {
@@ -167,7 +168,7 @@ func getAddressesFromRespDapp(response Response) map[string]bool {
 }
 
 func getAddressesFromRespNFT(response ResponseNFT) map[string]bool {
-	var addresses map[string]bool
+	addresses := map[string]bool{}
 
 	for _, tt := range response.Data.TokenBalances.TokenBalance {
 		if from := tt.Owner.Addresses; from != nil {
