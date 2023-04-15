@@ -51,10 +51,10 @@ const redeem = () => {
             className="rounded-[10px] w-[457px] h-[81px] bg-[#D9D9D9] pl-[125px]"
           />
           <Image
-            src="/images/kukuponpon.png"
+            src="/images/kukupon.png"
             width={120}
             height={120}
-            alt="kukuponpon"
+            alt="kukupon"
             className="absolute -translate-y-1/2 left-4 top-1/2"
           />
         </div>
@@ -89,7 +89,7 @@ const redeem = () => {
             width={180}
             height={120}
             style={{ top: -100, left: 40 }}
-            alt="kukuponpon"
+            alt="kukupon"
             className="absolute "
           />
           <div className="absolute top-12 left-0 w-full h-full flex items-center justify-center font-cartoon font-bold text-center p-4">

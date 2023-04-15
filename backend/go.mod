@@ -1,4 +1,4 @@
-module github.com/kryptogo/eth-tokyo-2023-kukuponpon
+module github.com/kryptogo/eth-tokyo-2023-kukupon
 
 go 1.17
 

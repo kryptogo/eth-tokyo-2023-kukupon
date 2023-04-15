@@ -36,4 +36,4 @@ Kukupon is a revolutionary platform that combines the best of gift cards and blo
 
 ## Demo
 
-https://eth-tokyo-2023-kukuponpon.vercel.app
+https://eth-tokyo-2023-kukupon.vercel.app

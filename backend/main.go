@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/kryptogo/eth-tokyo-2023-kukuponpon/api"
-	"github.com/kryptogo/eth-tokyo-2023-kukuponpon/api/middleware"
+	"github.com/kryptogo/eth-tokyo-2023-kukupon/api"
+	"github.com/kryptogo/eth-tokyo-2023-kukupon/api/middleware"
 )
 
 func main() {

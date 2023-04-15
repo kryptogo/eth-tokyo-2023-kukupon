@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/kryptogo/eth-tokyo-2023-kukuponpon/pkg/db"
+	"github.com/kryptogo/eth-tokyo-2023-kukupon/pkg/db"
 )
 
 func TestGetMembers(t *testing.T) {
