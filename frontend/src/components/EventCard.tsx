@@ -5,6 +5,7 @@ import { useAccount, useSignMessage } from "wagmi";
 import { useMutation } from "@tanstack/react-query";
 
 import Button from "./Button";
+import useCouponStore from "@/store/useCouponStore";
 
 interface IEventCard {
   id: string;
@@ -27,6 +28,7 @@ const EventCard: React.FC<IEventCard> = ({
 }) => {
   const { open, setOpen } = useIDKit();
   const { address, isConnecting, isDisconnected } = useAccount();
+  const [addCoupons] = useCouponStore((state) => state.addCoupons);
 
   const {
     data: signature,
@@ -50,7 +52,24 @@ const EventCard: React.FC<IEventCard> = ({
       })
   );
 
-  const handleSuccess = () => {};
+  const {
+    data: coupons,
+    mutate: getCoupons,
+    isLoading: getCouponLoading,
+    isSuccess: getCouponSuccess,
+  } = useMutation((data: { campaign_id: string }) =>
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/get_coupon`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      credentials: "include",
+    })
+  );
+
+  const handleSuccess = () => {
+    getCoupons({
+      campaign_id: id,
+    });
+  };
   const handleClick = () => {
     signMessage();
   };
@@ -75,6 +94,15 @@ const EventCard: React.FC<IEventCard> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [verifySuccess]);
 
+  useEffect(() => {
+    if (!getCouponSuccess) return;
+
+    console.log(coupons);
+    // addCoupons(id, coupons.coupons);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getCouponSuccess]);
+
   return (
     <div
       className="w-[280px] h-[394px] border border-white rounded-[10px] flex items-center justify-center p-4"
@@ -82,7 +110,7 @@ const EventCard: React.FC<IEventCard> = ({
         backgroundImage: `url(${backgroundImage})`,
       }}
     >
-      <div className="flex flex-col items-center gap-[120px]">
+      <div className="flex flex-col items-center justify-between h-full">
         <div className="flex flex-col items-center gap-5">
           <h2 className="text-[42px] font-bold text-white">{title}</h2>
           <ul className="text-white text-[20px] space-y-3">

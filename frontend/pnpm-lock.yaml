@@ -19,9 +19,10 @@ specifiers:
   tailwindcss: 3.3.1
   typescript: 5.0.4
   wagmi: ^0.12.10
+  zustand: ^4.3.7
 
 dependencies:
-  '@rainbow-me/rainbowkit': 0.12.8_2zilonrbe46hhh3fg7lizlfsyu
+  '@rainbow-me/rainbowkit': 0.12.8_p6z2ggx26acbownhigj6s6s2xi
   '@tanstack/react-query': 4.29.1_biqbaboplfbrettd7655fr4n2y
   '@tanstack/react-query-devtools': 4.29.1_veiur3vxaibs2bgteler4tkrom
   '@types/node': 18.15.11
@@ -39,6 +40,7 @@ dependencies:
   tailwindcss: 3.3.1_postcss@8.4.21
   typescript: 5.0.4
   wagmi: 0.12.10_wv32ercrucxbwe2ymw3nlxn6n4
+  zustand: 4.3.7_react@18.2.0
 
 packages:
 
@@ -1412,7 +1414,7 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@rainbow-me/rainbowkit/0.12.8_2zilonrbe46hhh3fg7lizlfsyu:
+  /@rainbow-me/rainbowkit/0.12.8_p6z2ggx26acbownhigj6s6s2xi:
     resolution: {integrity: sha512-Vo3o6hn5Zp3wKTMu/YnwFcKvs5tiOD5S+lCrWR7HiNc7b3DrO4HaJKqRINqrNnm/Z90pikuXPqst41cOBVI0eQ==}
     engines: {node: '>=12.4'}
     peerDependencies:

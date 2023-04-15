@@ -47,8 +47,8 @@ export default function Home() {
         <header className="h-[100px] flex justify-end items-center">
           <ConnectButton />
         </header>
-        <main className="h-[calc(100vh-100px)] grid grid-cols-2 items-stretch">
-          <div className="w-full h-full flex flex-col justify-center gap-[120px] max-w-[500px]">
+        <main className="h-[calc(100vh-100px)] grid grid-cols-1 justify-items-center lg:justify-items-start  text-center lg:text-left lg:grid-cols-2 items-stretch">
+          <div className="w-full h-full flex flex-col justify-center gap-[120px] max-w-[300px] md:max-w-[500px]">
             <div className="text-white font-cartoon">
               <div className="font-bold">
                 <div className="flex items-center justify-cneter">
@@ -72,7 +72,7 @@ export default function Home() {
       </div>
 
       <div className="w-full h-screen py-6">
-        <div className="container mx-auto grid grid-flow-row grid-cols-4 gap-[20px]">
+        <div className="container mx-auto grid grid-flow-row grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[20px]">
           {campaigns?.map((campaign) => (
             <EventCard
               id={campaign.id}

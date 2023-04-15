@@ -13,7 +13,6 @@ const { chains, provider } = configureChains([polygon], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
   appName: "kuku-ponpon",
-  projectId: "YOUR_PROJECT_ID",
   chains,
 });
 
