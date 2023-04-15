@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { VerifyingPaymaster__factory } from "./VerifyingPaymaster__factory";
+export { WhitelistingPaymaster__factory } from "./WhitelistingPaymaster__factory";
