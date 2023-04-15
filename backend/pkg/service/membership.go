@@ -103,9 +103,10 @@ func getMembers(campaignID, operationName, query string) map[string]bool {
 		for address := range addresses {
 			result[strings.ToLower(address)] = true
 		}
-
+		// fmt.Println("nextCursor:", nextCursor)
 		// 更新 cursor
 		cursor = nextCursor
+
 		// 如果沒有下一頁了，結束 loop
 		if cursor == "" {
 			break

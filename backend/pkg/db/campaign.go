@@ -68,7 +68,7 @@ var Campaigns = []Campaign{
 		GraphqlReq: GraphqlRequest{
 			Query: `query KGYCHoldersENSAndImages {
 			TokenBalances(
-			  input: {filter: {tokenAddress: {_eq: "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"}, tokenType: {_in: [ERC1155, ERC721]}}, blockchain: polygon, limit: 49x, cursor: __REPLACE__}
+			  input: {filter: {tokenAddress: {_eq: "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"}, tokenType: {_in: [ERC1155, ERC721]}}, blockchain: polygon, limit: 49, cursor: __REPLACE__}
 			) {
 			  TokenBalance {
 				owner {
