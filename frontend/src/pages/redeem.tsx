@@ -6,6 +6,7 @@ import { ConnectButton } from "@kryptogo/kryptogokit";
 import useRedeemCode from "@/hooks/useRedeemCode";
 import TapME from "@/components/Tapme";
 import { TxInfo, sendUserOperation } from "@/service/useOperation";
+import clsx from "clsx";
 
 const Redeem = () => {
   const [code, setCode] = useState<string>("");
@@ -84,6 +85,28 @@ const Redeem = () => {
         </div>
       )}
 
+      {userOperation.isSuccess && (
+        <div className="absolute top-0 flex items-center justify-center w-full h-full loading text-secondaryPink text-cartoon">
+          <div className="absolute top-0 z-10 w-full h-full bg-black opacity-80"></div>
+          <div className="rounded-[10px] bg-white z-10 flex relative w-64 h-72">
+            <Image
+              src="/images/loading_girl.png"
+              width={180}
+              height={120}
+              style={{ top: -100, left: 40 }}
+              alt="kukupon"
+              className="absolute"
+            />
+            <div className="absolute left-0 flex items-center justify-center w-full h-full p-4 font-bold text-center top-12 font-cartoon">
+              <span>Tx Hash: </span>
+              <a href="" rel="_blank">
+                {userOperation.data}
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* FOR MINT NFT */}
       {!redeemed ? (
         <main className="container h-[calc(100vh-70px)] flex flex-col items-center justify-center mx-auto text-center relative z-1 space-y-6">
@@ -129,7 +152,12 @@ const Redeem = () => {
           <TapME></TapME>
 
           <button
-            className="w-[401px] h-[88px] font-cartoon rounded-[10px] bg-secondaryPink font-black text-white text-[32px]"
+            className={clsx(
+              "w-[401px] h-[88px] font-cartoon rounded-[10px] bg-secondaryPink font-black text-white text-[32px]",
+              {
+                "opacity-50": userOperation.isLoading,
+              }
+            )}
             onClick={() => {
               userOperation.mutate({
                 code: localStorage.getItem("code")!,
@@ -140,7 +168,7 @@ const Redeem = () => {
               });
             }}
           >
-            Mint NFT
+            {userOperation.isLoading ? "Loading..." : "Mint NFT"}
           </button>
         </main>
       )}

@@ -10,10 +10,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { polygon } from "wagmi/chains";
+import { polygonMumbai } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
-const { chains, provider } = configureChains([polygon], [publicProvider()]);
+const { chains, provider } = configureChains(
+  [polygonMumbai],
+  [publicProvider()]
+);
 const appName = "kukupon";
 const { wallets } = getDefaultWallets({
   chains,
@@ -49,7 +52,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </KryptogoKitProvider>
       </WagmiConfig>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }
