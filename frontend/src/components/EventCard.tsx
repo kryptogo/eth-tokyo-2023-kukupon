@@ -105,7 +105,7 @@ const EventCard: React.FC<IEventCard> = ({
 
   return (
     <div
-      className="grayscaleBg w-[280px] h-[394px] border border-white rounded-[10px] flex items-center justify-center p-4"
+      className="grayscaleBg w-[280px] h-[394px] border border-white rounded-[10px] flex items-center justify-center p-4 bg-contain bg-no-repeat"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}
@@ -119,13 +119,26 @@ const EventCard: React.FC<IEventCard> = ({
             ))}
           </ul>
         </div>
-        <Button text="Verify" onClick={handleClick} />
+        <div className="flex flex-col items-center space-y-4 text-center">
+          {signMessageLoading && (
+            <p className="text-white">Waiting for signing... </p>
+          )}
+          {verifyLoading && (
+            <p className="text-white">Checking your qualifications...</p>
+          )}
 
-        <IDKitWidget
-          app_id={process.env.NEXT_PUBLIC_APP_ID!}
-          action={id}
-          onSuccess={handleSuccess}
-        />
+          <Button
+            text="Verify"
+            onClick={handleClick}
+            status={signMessageLoading || verifyLoading ? "loading" : "normal"}
+          />
+
+          <IDKitWidget
+            app_id={process.env.NEXT_PUBLIC_APP_ID!}
+            action={id}
+            onSuccess={handleSuccess}
+          />
+        </div>
       </div>
     </div>
   );
