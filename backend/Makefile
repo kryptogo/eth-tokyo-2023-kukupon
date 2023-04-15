@@ -1,5 +1,5 @@
 run:
-	source config/local.sh && \
+	source config/env.sh && \
 	go run .
 
 
