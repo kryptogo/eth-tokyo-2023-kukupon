@@ -1,7 +1,21 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import Image from 'next/image';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import useRedeemCode from "@/hooks/useRedeemCode";
 
-const redeem = () => {
+const Redeem = () => {
+  const [code, setCode] = useState<string>("");
+
+  const { address } = useRedeemCode(code);
+
+  const handleRedeem = () => {
+    localStorage.setItem("code", code);
+  };
+
+  useEffect(() => {
+    if (!address) return;
+  }, [address]);
+
   return (
     <div className="w-full h-screen bg-primaryPink text-secondaryPink text-cartoon">
       <div className="w-[314px] h-[518px] absolute right-0 top-1/2 -translate-y-1/2 scale-75 origin-right z-2">
@@ -47,19 +61,24 @@ const redeem = () => {
 
         <div className="relative">
           <input
+            value={code}
             type="text"
+            onChange={(e) => setCode(e.target.value)}
             className="rounded-[10px] w-[457px] h-[81px] bg-[#D9D9D9] pl-[125px]"
           />
           <Image
-            src="/images/kukuponpon.png"
+            src="/images/kukupon.png"
             width={120}
             height={120}
-            alt="kukuponpon"
+            alt="kukupon"
             className="absolute -translate-y-1/2 left-4 top-1/2"
           />
         </div>
 
-        <button className="w-[142px] h-[37px] rounded-[10px] bg-secondaryPink text-white">
+        <button
+          className="w-[142px] h-[37px] rounded-[10px] bg-secondaryPink text-white"
+          onClick={handleRedeem}
+        >
           Play Now
         </button>
       </main>
@@ -81,18 +100,18 @@ const redeem = () => {
       </main> */}
 
       {/* FOR LOADING STATE*/}
-      {/* <div className="loading absolute top-0  w-full h-full text-secondaryPink text-cartoon flex items-center justify-center">
-        <div className="top-0 absolute bg-black w-full h-full opacity-70"></div>
+      {/* <div className="absolute top-0 flex items-center justify-center w-full h-full loading text-secondaryPink text-cartoon">
+        <div className="absolute top-0 w-full h-full bg-black opacity-70"></div>
         <div className="rounded-[10px] bg-white z-10 flex relative w-64 h-72">
           <Image
             src="/images/loading_girl.png"
             width={180}
             height={120}
             style={{ top: -100, left: 40 }}
-            alt="kukuponpon"
+            alt="kukupon"
             className="absolute "
           />
-          <div className="absolute top-12 left-0 w-full h-full flex items-center justify-center font-cartoon font-bold text-center p-4">
+          <div className="absolute left-0 flex items-center justify-center w-full h-full p-4 font-bold text-center top-12 font-cartoon">
             We are creating your wallet. Give me a second I’ll give you a new
             world
           </div>
@@ -102,4 +121,4 @@ const redeem = () => {
   );
 };
 
-export default redeem;
+export default Redeem;

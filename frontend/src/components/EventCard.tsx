@@ -1,11 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
-import { useIDKit } from '@worldcoin/idkit';
-import dynamic from 'next/dynamic';
-import React, { useEffect } from 'react';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useMutation } from "@tanstack/react-query";
+import { useIDKit } from "@worldcoin/idkit";
+import dynamic from "next/dynamic";
+import React, { useEffect } from "react";
+import { useAccount, useSignMessage } from "wagmi";
 
-import useCouponStore from '@/store/useCouponStore';
-import Button from './Button';
+import useCouponStore from "@/store/useCouponStore";
+import Button from "./Button";
 
 interface IEventCard {
   id: string;
@@ -16,7 +16,7 @@ interface IEventCard {
 
 const IDKitWidget = dynamic(
   // @ts-ignore
-  () => import('@worldcoin/idkit').then((mod) => mod.IDKitWidget),
+  () => import("@worldcoin/idkit").then((mod) => mod.IDKitWidget),
   { ssr: false }
 );
 
@@ -47,7 +47,7 @@ const EventCard: React.FC<IEventCard> = ({
   } = useMutation(
     (data: { campaign_id: string; from: string; signature: string }) =>
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify_campaign`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(data),
       })
   );
@@ -59,10 +59,10 @@ const EventCard: React.FC<IEventCard> = ({
     isSuccess: getCouponSuccess,
   } = useMutation((data: { campaign_id: string }) =>
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/get_coupon`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
-      credentials: 'include',
-    })
+      credentials: "include",
+    }).then((res) => res.json())
   );
 
   const handleSuccess = () => {

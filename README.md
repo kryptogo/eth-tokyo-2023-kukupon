@@ -1,30 +1,39 @@
-# Kukuponpon
-> When Gift Card Meet Blockchain Gaming.
+# Kukupon
+> Where Gift Cards Meet Blockchain Gaming
 
-## Short description
-> A max 280-character or less description of your project (it should fit in a tweet!)
+## Introduction
+Kukupon is a revolutionary platform that combines the best of gift cards and blockchain technology to provide a seamless and secure way for users to enter the world of GameFi. It is a more efficient and flexible solution that can reduce operational costs while providing better user experiences and more effective promotion tracking.
 
-Kukuponpon is a voucher wallet for blockchain games. We simplify gaming by offering anonymous verification, free sponsorships, and promotion budgets to attract players. 
+## Features
+- Supports a guest mode for new players
+- Provides entry NFTs
+- Combines the advantages of Faucet and POAP with GameFi onboarding
+- Wallet-less solution ensures the highest security without any burden
+- Allows seamless gameplay across multiple devices
+- Utilizes various key technologies to provide a secure and flexible gaming experience
 
-Join the GameFi revolution!
+## How to Use
+1. Obtain a voucher code from a participating game developer
+2. Input the voucher code in the designated field to access the account and start playing
+3. Use different devices with the same voucher code for seamless gameplay across multiple devices
 
-## Description
-> Go in as much detail as you can about what this project is. Please be as clear as possible!
+## Use Cases
+- Social media promotion
+- Influencer marketing
+- Community building
+- Rewarding loyal players
+- Providing in-game items, currency, or other rewards with gift cards
+- Providing discounts for purchases in the game
+- Redeeming rewards or participating in special item or event giveaways
+- Attracting new players
 
-Kukuponpon can be applied in various scenarios, such as game discussion forums, donations and withdrawals, and in-game screens. The user flow involves selecting the category for verification of identity, allowing senior players to gain benefits and distribute promotion codes, and newcomers to enter promotion codes or be directed to forums.
-
-## How it's made
-> Tell us about how you built this project; the nitty-gritty details. What technologies did you use? How are they pieced together? If you used any sponsor technologies, how did it benefit your project? Did you do anything particuarly hacky that's notable and worth mentioning?
-
-Kukuponpon was built using a variety of technologies to ensure a seamless gaming experience. 
-
-* Airstack was used to track players' on-chain activity, while ERC-4337 was utilized to establish a Paymaster for Voucher payments and a Voucher Wallet for delivering Gift Cards to players. 
-* WorldID was also employed to verify identities and prevent duplicate redemptions. 
-
-By combining these technologies, we have created a secure and efficient way for players to enjoy GameFi. 
-
-Our unique technology handles private keys, accelerates transactions, and enables zero-knowledge verification.
+## Contributors (sorted in alphabetical order)
+- Alan: Backend Engineer
+- Dorara: Full-Stack Engineer
+- Harry: Architect
+- Kordan: Product Manager
+- Kuan: Frontend Engineer
 
 ## Demo
 
-https://eth-tokyo-2023-kukuponpon.vercel.app
+https://eth-tokyo-2023-kukupon.vercel.app
