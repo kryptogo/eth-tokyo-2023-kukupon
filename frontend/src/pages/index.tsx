@@ -1,12 +1,11 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import Image from 'next/image';
 import { useAccount } from 'wagmi';
 
 import Button from '@/components/Button';
 import EventCard from '@/components/EventCard';
 
+import { LottieComponent } from '@/components/LottieLogo';
 import { useCampaigns } from '@/service/campaign';
-import kukuponpon from '/public/images/kukuponpon.png';
 
 export default function Home() {
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -52,14 +51,8 @@ export default function Home() {
             <div className="text-white font-cartoon">
               <div className="font-bold">
                 <div className="flex items-center justify-cneter">
-                  <h1 className="text-[75px] leading-tight">KUKU</h1>
-                  <Image
-                    src={kukuponpon}
-                    alt="kukuponpon logo"
-                    className="w-[145px]"
-                  />
+                  <LottieComponent></LottieComponent>
                 </div>
-                <h1 className="text-[75px] leading-tight">PONPON</h1>
               </div>
 
               <h2 className="text-[24px]">
