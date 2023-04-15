@@ -8,9 +8,9 @@ Go v1.17
 
 ## Third-Party Packages
 
-1. EIP-4337 Account Abstract
-2. Worldcoin
-3. airstack
+1. [EIP-4337 Account Abstract](https://eips.ethereum.org/EIPS/eip-4337)
+2. [Worldcoin](https://worldcoin.org/)
+3. [airstack](https://www.airstack.xyz/)
 
 ## Getting Started
 
