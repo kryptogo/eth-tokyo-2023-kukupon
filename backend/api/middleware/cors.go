@@ -12,7 +12,7 @@ func init() {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowMethods = []string{"OPTIONS", "HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Accept"}
-	corsConfig.AllowOrigins = []string{"https://eth-tokyo-2023-kukupon.vercel.app"}
+	corsConfig.AllowOrigins = []string{"http://localhost:3000", "https://eth-tokyo-2023-kukupon.vercel.app"}
 	corsConfig.AllowCredentials = true
 	CorsMiddleware = cors.New(corsConfig)
 }
