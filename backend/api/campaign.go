@@ -74,9 +74,9 @@ func RetrieveCoupon(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// coupons := service.GetCoupons(req.CampaignId)
+	coupons := service.GetCoupons(req.CampaignId)
 
-	// c.JSON(http.StatusOK, gin.H{
-	// 	"coupons": coupons,
-	// })
+	c.JSON(http.StatusOK, gin.H{
+		"coupons": coupons,
+	})
 }

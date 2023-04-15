@@ -33,29 +33,47 @@ func composeTxData(from string) (*bind.TransactOpts, error) {
 	return opts, nil
 }
 
-func PrepareTx(from, newAddress, paymasterAddress string) (*WhitelistingPaymasterSession, error) {
+func PrepareTxPayment(from, contract string) (*WhitelistingPaymaster, *bind.TransactOpts, error) {
 	url := alchemyapi.GetAPIURL()
 	conn, err := ethclient.Dial(url)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	contractAddress := common.HexToAddress(paymasterAddress)
+	contractAddress := common.HexToAddress(contract)
 	a, err := NewWhitelistingPaymaster(contractAddress, conn)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	txOpts, err := composeTxData(from)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	session := WhitelistingPaymasterSession{
-		Contract:     a,
-		TransactOpts: *txOpts,
+	return a, txOpts, nil
+}
+
+func PrepareTxAccountFactory(from, contract string) (*SimpleAccountFactory, *bind.TransactOpts, error) {
+	url := alchemyapi.GetAPIURL()
+	conn, err := ethclient.Dial(url)
+	if err != nil {
+		return nil, nil, err
 	}
-	return &session, nil
+
+	contractAddress := common.HexToAddress(contract)
+	a, err := NewSimpleAccountFactory(contractAddress, conn)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	txOpts, err := composeTxData(from)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return a, txOpts, nil
 }
 
 func sign(tx *types.Transaction) (*types.Transaction, error) {
