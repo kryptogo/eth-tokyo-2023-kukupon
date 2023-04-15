@@ -10,3 +10,12 @@ html {
   margin: 0;
   padding: 0;
 }
+
+.grayscaleBg {
+  transition: filter 0.3s ease-in-out;
+  filter: grayscale(100%);
+}
+
+.grayscaleBg:hover {
+  filter: grayscale(0%);
+}

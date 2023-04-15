@@ -1,13 +1,12 @@
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
-import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { polygon } from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import '@/styles/globals.css';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import type { AppProps } from 'next/app';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { polygon } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, provider } = configureChains([polygon], [publicProvider()]);
 
