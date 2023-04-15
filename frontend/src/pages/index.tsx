@@ -1,4 +1,4 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from "@kryptogo/kryptogokit";
 import { useAccount } from "wagmi";
 
 import Button from "@/components/Button";
