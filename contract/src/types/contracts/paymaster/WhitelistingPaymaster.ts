@@ -73,6 +73,7 @@ export interface WhitelistingPaymasterInterface extends utils.Interface {
     "COST_OF_POST()": FunctionFragment;
     "addStake(uint32)": FunctionFragment;
     "addToWhitelist(address,uint256)": FunctionFragment;
+    "batchAddToWhitelist(address[],uint256[])": FunctionFragment;
     "deposit()": FunctionFragment;
     "entryPoint()": FunctionFragment;
     "getDeposit()": FunctionFragment;
@@ -93,6 +94,7 @@ export interface WhitelistingPaymasterInterface extends utils.Interface {
       | "COST_OF_POST"
       | "addStake"
       | "addToWhitelist"
+      | "batchAddToWhitelist"
       | "deposit"
       | "entryPoint"
       | "getDeposit"
@@ -119,6 +121,10 @@ export interface WhitelistingPaymasterInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addToWhitelist",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "batchAddToWhitelist",
+    values: [PromiseOrValue<string>[], PromiseOrValue<BigNumberish>[]]
   ): string;
   encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
   encodeFunctionData(
@@ -182,6 +188,10 @@ export interface WhitelistingPaymasterInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "addStake", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "addToWhitelist",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "batchAddToWhitelist",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
@@ -292,6 +302,12 @@ export interface WhitelistingPaymaster extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    batchAddToWhitelist(
+      addrs: PromiseOrValue<string>[],
+      sponsoredGasValues: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     deposit(
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -366,6 +382,12 @@ export interface WhitelistingPaymaster extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  batchAddToWhitelist(
+    addrs: PromiseOrValue<string>[],
+    sponsoredGasValues: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   deposit(
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -437,6 +459,12 @@ export interface WhitelistingPaymaster extends BaseContract {
     addToWhitelist(
       addr: PromiseOrValue<string>,
       sponsoredGas: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    batchAddToWhitelist(
+      addrs: PromiseOrValue<string>[],
+      sponsoredGasValues: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -529,6 +557,12 @@ export interface WhitelistingPaymaster extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    batchAddToWhitelist(
+      addrs: PromiseOrValue<string>[],
+      sponsoredGasValues: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     deposit(
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -599,6 +633,12 @@ export interface WhitelistingPaymaster extends BaseContract {
     addToWhitelist(
       addr: PromiseOrValue<string>,
       sponsoredGas: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    batchAddToWhitelist(
+      addrs: PromiseOrValue<string>[],
+      sponsoredGasValues: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

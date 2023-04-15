@@ -1,12 +1,11 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import Image from "next/image";
-import { useAccount } from "wagmi";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi';
 
-import Button from "@/components/Button";
-import EventCard from "@/components/EventCard";
+import Button from '@/components/Button';
+import EventCard from '@/components/EventCard';
 
-import { useCampaigns } from "@/service/campaign";
-import kukuponpon from "/public/images/kukuponpon.png";
+import { LottieComponent } from '@/components/LottieLogo';
+import { useCampaigns } from '@/service/campaign';
 
 export default function Home() {
   const { address, isConnecting, isDisconnected } = useAccount();

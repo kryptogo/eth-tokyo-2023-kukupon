@@ -19,3 +19,19 @@ html {
 .grayscaleBg:hover {
   filter: grayscale(0%);
 }
+
+.yoyo {
+  animation: updown 1s infinite;
+}
+
+@keyframes updown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
