@@ -1,8 +1,35 @@
 import "@nomiclabs/hardhat-ethers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { EntryPoint, WhitelistingPaymaster, SimpleAccount } from "../src/types";
+import {
+  EntryPoint,
+  WhitelistingPaymaster,
+  SimpleAccount,
+  SimpleAccountFactory,
+} from "../src/types";
 import { UserOperationStruct } from "../src/types/contracts/account/SimpleAccount";
+import { SimpleAccountAPI, PaymasterAPI } from "@account-abstraction/sdk";
+import { getInitCode } from "../utils/initCode";
+const IEntryPoint_json_1 = require("../data/abi/IEntryPoint.json");
+const utils_1 = require("ethers/lib/utils");
+
+var _a;
+const UserOpType =
+  (_a = IEntryPoint_json_1.find(
+    (entry: any) => entry.name === "simulateValidation"
+  )) === null || _a === void 0
+    ? void 0
+    : _a.inputs[0];
+
+if (UserOpType == null) {
+  throw new Error(
+    `unable to find method simulateValidation in EP ${IEntryPoint_json_1.filter(
+      (x: any) => x.type === "function"
+    )
+      .map((x: any) => x.name)
+      .join(",")}`
+  );
+}
 
 // Add a helper function to calculate the user operation hash
 // Define the getUserOpHash function
@@ -12,7 +39,7 @@ function getUserOpHash(
   chainId: number
 ): string {
   const userOpHash = (0, ethers.utils.keccak256)(packUserOp(op, true));
-  const enc = ethers.utils.defaultAbiCoder.encode(
+  const enc = utils_1.defaultAbiCoder.encode(
     ["bytes32", "address", "uint256"],
     [userOpHash, entryPoint, chainId]
   );
@@ -28,7 +55,7 @@ function encode(typevalues: any, forSignature: any) {
       ? (0, ethers.utils.keccak256)(typevalue.val)
       : typevalue.val
   );
-  return ethers.utils.defaultAbiCoder.encode(types, values);
+  return utils_1.defaultAbiCoder.encode(types, values);
 }
 
 function packUserOp(op: any, forSignature = true) {
@@ -86,7 +113,7 @@ function packUserOp(op: any, forSignature = true) {
     };
     // console.log('hard-coded userOpType', userOpType)
     // console.log('from ABI userOpType', UserOpType)
-    let encoded = ethers.utils.defaultAbiCoder.encode(
+    let encoded = utils_1.defaultAbiCoder.encode(
       [userOpType],
       [Object.assign(Object.assign({}, op), { signature: "0x" })]
     );
@@ -94,17 +121,44 @@ function packUserOp(op: any, forSignature = true) {
     encoded = "0x" + encoded.slice(66, encoded.length - 64);
     return encoded;
   }
-  const typevalues = UserOpType.components.map((c) => ({
+  const typevalues = UserOpType.components.map((c: any) => ({
     type: c.type,
     val: op[c.name],
   }));
   return encode(typevalues, forSignature);
 }
 
+const executeIface = new ethers.utils.Interface([
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "dest",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "func",
+        type: "bytes",
+      },
+    ],
+    name: "execute",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+]);
+
 describe("WhitelistingPaymaster", function () {
   let whitelistingPaymaster: WhitelistingPaymaster,
     entryPoint: EntryPoint,
-    simpleAccount: SimpleAccount;
+    simpleAccountFactory: SimpleAccountFactory,
+    simpleAccountAddress: string;
   let owner: any, addr1: any, addr2: any;
 
   beforeEach(async () => {
@@ -126,14 +180,19 @@ describe("WhitelistingPaymaster", function () {
     await whitelistingPaymaster.deployed();
 
     // Deploy the simple account factory
-    const SimpleAccountFactory = await ethers.getContractFactory(
-      "SimpleAccount",
+    const SimpleAccountFactoryFac = await ethers.getContractFactory(
+      "SimpleAccountFactory",
       addr1
     );
-    simpleAccount = (await SimpleAccountFactory.deploy(
+    simpleAccountFactory = (await SimpleAccountFactoryFac.deploy(
       entryPoint.address
-    )) as SimpleAccount;
-    await simpleAccount.deployed();
+    )) as SimpleAccountFactory;
+    await simpleAccountFactory.deployed();
+
+    simpleAccountAddress = await simpleAccountFactory.getAddress(
+      addr2.address,
+      0
+    );
   });
 
   it("should successfully deposit 1 ETH, add SimpleAccount contract address to the whitelist, and pay 0.1 ETH", async () => {
@@ -150,13 +209,13 @@ describe("WhitelistingPaymaster", function () {
 
     // Add the SimpleAccount contract address to the whitelist and pay amount of 0.1 ETH
     await whitelistingPaymaster.addToWhitelist(
-      simpleAccount.address,
+      simpleAccountAddress,
       ethers.utils.parseEther("0.1")
     );
 
     // Check that the SimpleAccount contract address has been added to the whitelist and has the correct sponsored gas
     const userDetails = await whitelistingPaymaster.userDetails(
-      simpleAccount.address
+      simpleAccountAddress
     );
     expect(userDetails.isWhitelisted).to.be.true;
     expect(userDetails.remainingGas).to.equal(ethers.utils.parseEther("0.1"));
@@ -165,33 +224,30 @@ describe("WhitelistingPaymaster", function () {
   it("should execute user ops sponsored by paymaster contract", async () => {
     // Send 1 ETH to the deposit() method of the paymaster contract
     await whitelistingPaymaster.deposit({
-      value: ethers.utils.parseEther("1"),
+      value: ethers.utils.parseEther("5"),
     });
 
     // Add the SimpleAccount contract address to the whitelist and pay amount of 0.1 ETH
     await whitelistingPaymaster.addToWhitelist(
-      simpleAccount.address,
-      ethers.utils.parseEther("0.1")
+      simpleAccountAddress,
+      ethers.utils.parseEther("2")
     );
 
     const userOperation: UserOperationStruct = {
-      sender: simpleAccount.address,
+      sender: simpleAccountAddress,
       nonce: 0,
-      initCode: "0x",
-      callData: simpleAccount.interface.encodeFunctionData("execute", [
+      initCode: getInitCode(simpleAccountFactory.address, addr2.address),
+      callData: executeIface.encodeFunctionData("execute", [
         addr2.address,
-        ethers.utils.parseEther("0.2"),
+        ethers.utils.parseEther("0.1"),
         "0x",
       ]),
-      callGasLimit: 100000,
-      verificationGasLimit: 0,
-      preVerificationGas: 0,
+      callGasLimit: 82000,
+      verificationGasLimit: 500000,
+      preVerificationGas: 60000,
       maxFeePerGas: ethers.utils.parseUnits("100", "gwei"),
       maxPriorityFeePerGas: ethers.utils.parseUnits("2", "gwei"),
-      paymasterAndData: ethers.utils.defaultAbiCoder.encode(
-        ["address"],
-        [whitelistingPaymaster.address]
-      ),
+      paymasterAndData: whitelistingPaymaster.address,
       signature: "0x",
     };
     // Get the user operation hash
@@ -200,28 +256,26 @@ describe("WhitelistingPaymaster", function () {
       entryPoint.address,
       (await ethers.provider.getNetwork()).chainId
     );
+    console.log("userOpHash in test:", userOpHash);
     // Sign the user operation hash with addr2's private key
     const signature = await addr2.signMessage(
       ethers.utils.arrayify(userOpHash)
     );
     // Update the signature field in the user operation
     userOperation.signature = signature;
+    console.log("signature: ", signature);
+    console.log("userOp:", userOperation);
 
     const ops = [userOperation];
-    const beneficiary = whitelistingPaymaster.address;
+    const beneficiary = addr2.address;
 
-    // await expect()
-    //   .to.emit(simpleAccount, "Transfer")
-    //   .withArgs(addr1.address, addr2.address, ethers.utils.parseEther("0.2"));
     await entryPoint.connect(addr1).handleOps(ops, beneficiary);
 
     // Check that the SimpleAccount contract address has used some sponsored gas
     const userDetails = await whitelistingPaymaster.userDetails(
-      simpleAccount.address
+      simpleAccountAddress
     );
     expect(userDetails.isWhitelisted).to.be.true;
-    expect(userDetails.remainingGas).to.lessThan(
-      ethers.utils.parseEther("0.1")
-    );
+    expect(userDetails.remainingGas).to.lessThan(ethers.utils.parseEther("2"));
   });
 });

@@ -36,3 +36,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+env variables
+
+```
+NEXT_PUBLIC_API_URL=https://kuku-ponpon-xjykmmyssa-an.a.run.app
+NEXT_PUBLIC_APP_ID=app_staging_9944c95284e694fe636bf829b82b44ca
+```

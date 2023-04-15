@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { useIDKit } from "@worldcoin/idkit";
-import { useAccount, useSignMessage } from "wagmi";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
+import { useIDKit } from '@worldcoin/idkit';
+import dynamic from 'next/dynamic';
+import React, { useEffect } from 'react';
+import { useAccount, useSignMessage } from 'wagmi';
 
-import Button from "./Button";
+import useCouponStore from '@/store/useCouponStore';
+import Button from './Button';
 
 interface IEventCard {
   id: string;
@@ -15,7 +16,7 @@ interface IEventCard {
 
 const IDKitWidget = dynamic(
   // @ts-ignore
-  () => import("@worldcoin/idkit").then((mod) => mod.IDKitWidget),
+  () => import('@worldcoin/idkit').then((mod) => mod.IDKitWidget),
   { ssr: false }
 );
 
@@ -27,6 +28,7 @@ const EventCard: React.FC<IEventCard> = ({
 }) => {
   const { open, setOpen } = useIDKit();
   const { address, isConnecting, isDisconnected } = useAccount();
+  const [addCoupons] = useCouponStore((state) => [state.addCoupons]);
 
   const {
     data: signature,
@@ -45,12 +47,29 @@ const EventCard: React.FC<IEventCard> = ({
   } = useMutation(
     (data: { campaign_id: string; from: string; signature: string }) =>
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify_campaign`, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(data),
       })
   );
 
-  const handleSuccess = () => {};
+  const {
+    data: coupons,
+    mutate: getCoupons,
+    isLoading: getCouponLoading,
+    isSuccess: getCouponSuccess,
+  } = useMutation((data: { campaign_id: string }) =>
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/get_coupon`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      credentials: 'include',
+    })
+  );
+
+  const handleSuccess = () => {
+    getCoupons({
+      campaign_id: id,
+    });
+  };
   const handleClick = () => {
     signMessage();
   };
@@ -75,14 +94,23 @@ const EventCard: React.FC<IEventCard> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [verifySuccess]);
 
+  useEffect(() => {
+    if (!getCouponSuccess) return;
+
+    console.log(coupons);
+    // addCoupons(id, coupons.coupons);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getCouponSuccess]);
+
   return (
     <div
-      className="w-[280px] h-[394px] border border-white rounded-[10px] flex items-center justify-center p-4"
+      className="grayscaleBg w-[280px] h-[394px] border border-white rounded-[10px] flex items-center justify-center p-4"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}
     >
-      <div className="flex flex-col items-center gap-[120px]">
+      <div className="flex flex-col items-center justify-between h-full">
         <div className="flex flex-col items-center gap-5">
           <h2 className="text-[42px] font-bold text-white">{title}</h2>
           <ul className="text-white text-[20px] space-y-3">

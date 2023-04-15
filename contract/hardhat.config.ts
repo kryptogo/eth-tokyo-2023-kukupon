@@ -35,6 +35,12 @@ module.exports = {
       gasPrice: 80000000000,
     },
   },
+  etherscan: {
+    apiKey: {
+      polygonMumbai: process.env.POLYGONSCAN_API_KEY,
+      polygon: process.env.POLYGONSCAN_API_KEY,
+    },
+  },
   typechain: {
     outDir: "src/types",
     target: "ethers-v5",

@@ -2,4 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap');
+
+body,
+html {
+  background-color: #212121;
+  margin: 0;
+  padding: 0;
+}
+
+.grayscaleBg {
+  transition: filter 0.3s ease-in-out;
+  filter: grayscale(100%);
+}
+
+.grayscaleBg:hover {
+  filter: grayscale(0%);
+}
