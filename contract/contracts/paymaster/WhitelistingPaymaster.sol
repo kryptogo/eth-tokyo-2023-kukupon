@@ -30,11 +30,24 @@ contract WhitelistingPaymaster is BasePaymaster {
 
     function addToWhitelist(address addr, uint256 sponsoredGas) external onlyOwner {
         require(addr != address(0), "Invalid address");
-        userDetails[addr] = UserDetails({
-          isWhitelisted: true, 
-          remainingGas: sponsoredGas
-        });
+        if (userDetails[addr].isWhitelisted) {
+        userDetails[addr].remainingGas += sponsoredGas;
+        } else {
+            userDetails[addr] = UserDetails({
+                isWhitelisted: true, 
+                remainingGas: sponsoredGas
+            });
+        }
         emit AddressAddedToWhitelist(addr, sponsoredGas);
+    }
+
+    function batchAddToWhitelist(address[] memory addrs, uint256[] memory sponsoredGasValues) external onlyOwner {
+        require(addrs.length == sponsoredGasValues.length, "Arrays must be of equal length");
+        for (uint i = 0; i < addrs.length; i++) {
+            address addr = addrs[i];
+            uint256 sponsoredGas = sponsoredGasValues[i];
+            this.addToWhitelist(addr, sponsoredGas);
+        }
     }
 
     function validatePaymasterUserOp(UserOperation calldata userOp, bytes32 /*userOpHash*/, uint256 maxCost)

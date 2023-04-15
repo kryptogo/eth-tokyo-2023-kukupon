@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 require("dotenv").config();
 
 // Usage: npx hardhat run scripts/deposit-paymaster.ts --network yourNetwork
-const etherToDeposit = "0.01";
+const etherToDeposit = "0.15";
 
 async function main() {
   const WhitelistingPaymaster = await ethers.getContractFactory(
