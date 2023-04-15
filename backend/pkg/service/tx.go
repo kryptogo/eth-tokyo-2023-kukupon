@@ -21,9 +21,10 @@ func composeTxData(from string) (*bind.TransactOpts, error) {
 		return nil, err
 	}
 	opts := &bind.TransactOpts{
-		From:     common.HexToAddress(from),
-		Value:    value,
-		GasPrice: big.NewInt(200000000000),
+		From:  common.HexToAddress(from),
+		Value: value,
+		// GasPrice: big.NewInt(200000000000), //matic
+		GasPrice: big.NewInt(2000000000), // mumbai
 		GasLimit: 200000,
 		Signer: func(address common.Address, tx *types.Transaction) (*types.Transaction, error) {
 			return sign(tx)

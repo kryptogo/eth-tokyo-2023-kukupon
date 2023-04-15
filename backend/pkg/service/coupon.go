@@ -34,7 +34,7 @@ func GenerateWallets(number int) ([]string, []string) {
 	coupons := []string{}
 	wallets := []string{}
 	for i := 0; i < number; i++ {
-		randomString := getRandomString()
+		randomString := "123" //getRandomString()
 		coupons = append(coupons, randomString)
 
 		// 2. Hash the random string using SHA-256 to create a private key

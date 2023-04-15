@@ -4,14 +4,19 @@ import (
 	"math/big"
 )
 
+type GraphqlRequest struct {
+	Query         string            `json:"query"`
+	Variables     map[string]string `json:"variables,omitempty"`
+	OperationName string            `json:"operationName,omitempty"`
+}
+
 type Campaign struct {
-	ID                string   `json:"id"`
-	Query             string   `json:"query"`
-	RequiredCondition []string `json:"required_condition"`
-	Sponsor           string   `json:"sponsor"`
-	Image             string   `json:"image"`
-	SponsorGas        big.Int  `json:"sponsor_gas"`
-	OperationName     string   `json:"operation_name"`
+	ID                string         `json:"id"`
+	RequiredCondition []string       `json:"required_condition"`
+	Sponsor           string         `json:"sponsor"`
+	Image             string         `json:"image"`
+	SponsorGas        big.Int        `json:"sponsor_gas"`
+	GraphqlReq        GraphqlRequest `json:"graphql_req"`
 }
 
 var Campaigns = []Campaign{
@@ -21,8 +26,8 @@ var Campaigns = []Campaign{
 			"Interacted with dapp 1inch at least 100 times",
 			"Total transaction amount exceeds 3000 USDC.",
 		},
-		OperationName: "GetUserInteractedWithTokenAddress",
-		Query: `
+		GraphqlReq: GraphqlRequest{
+			Query: `
 		query GetUserInteractedWithTokenAddress {
 			TokenTransfers(
 				input: {
@@ -33,7 +38,7 @@ var Campaigns = []Campaign{
 						]
 					},
 					blockchain: ethereum,
-					limit: 10
+					limit: 30
 				}
 			) {
 				TokenTransfer {
@@ -47,6 +52,8 @@ var Campaigns = []Campaign{
 			}
 		}
 	`,
+			OperationName: "GetUserInteractedWithTokenAddress",
+		},
 		Sponsor:    "1inch",
 		Image:      "https://1inch.io/assets/social-image/main-cover-2.png",
 		SponsorGas: *big.NewInt(500000000000000000), // 0.5
@@ -56,10 +63,10 @@ var Campaigns = []Campaign{
 		RequiredCondition: []string{
 			"Hold at least 1 KYGC token",
 		},
-		OperationName: "KGYCHoldersENSAndImages",
-		Query: `query KGYCHoldersENSAndImages {
+		GraphqlReq: GraphqlRequest{
+			Query: `query KGYCHoldersENSAndImages {
 			TokenBalances(
-			  input: {filter: {tokenAddress: {_eq: "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"}, tokenType: {_in: [ERC1155, ERC721]}}, blockchain: polygon, limit: 100}
+			  input: {filter: {tokenAddress: {_eq: "0xa82fa2c0fd1fc6bb964d9302d3507b88a5f1b8d0"}, tokenType: {_in: [ERC1155, ERC721]}}, blockchain: polygon, limit: 30}
 			) {
 			  TokenBalance {
 				owner {
@@ -72,9 +79,13 @@ var Campaigns = []Campaign{
 			  }
 			}
 		  }`,
-		Sponsor:    "KryptoGO",
-		Image:      "https://twnewshub.com/wp-content/uploads/2021/12/Android-topic.png",
-		SponsorGas: *big.NewInt(500000000000000000), // 0.5
+			OperationName: "KGYCHoldersENSAndImages",
+		},
+		Sponsor: "KryptoGO",
+		Image:   "https://twnewshub.com/wp-content/uploads/2021/12/Android-topic.png",
+		// SponsorGas: *big.NewInt(500000000000000000), // 0.5 matic
+		SponsorGas: *big.NewInt(10000000000000000), // 0.01 mumbai
+
 	},
 }
 
