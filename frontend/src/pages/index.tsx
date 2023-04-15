@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full h-screen bg-[#212121] bg-anime bg-no-repeat bg-right">
+    <div className="w-full h-screen bg-[#212121] bg-anime bg-contain bg-no-repeat bg-right">
       <div className="container h-full mx-auto">
         <header className="h-[100px] flex justify-end items-center">
           <ConnectButton />
