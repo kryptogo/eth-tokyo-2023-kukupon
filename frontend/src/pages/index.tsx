@@ -1,11 +1,12 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Image from "next/image";
+import { useAccount } from "wagmi";
 
-import Button from '@/components/Button';
-import EventCard from '@/components/EventCard';
+import Button from "@/components/Button";
+import EventCard from "@/components/EventCard";
 
-import { LottieComponent } from '@/components/LottieLogo';
-import { useCampaigns } from '@/service/campaign';
+import { useCampaigns } from "@/service/campaign";
+import kukuponpon from "/public/images/kukuponpon.png";
 
 export default function Home() {
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -65,7 +66,7 @@ export default function Home() {
       </div>
 
       <div className="w-full h-screen py-6">
-        <div className="container mx-auto grid grid-flow-row grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[20px]">
+        <div className="container mx-auto grid grid-flow-row grid-cols-2 lg:grid-cols-4 gap-[20px]">
           {campaigns?.map((campaign) => (
             <EventCard
               id={campaign.id}

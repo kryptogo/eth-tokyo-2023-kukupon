@@ -21,6 +21,7 @@
     "@types/react-lottie": "^1.2.6",
     "@worldcoin/idkit": "^0.4.9",
     "autoprefixer": "10.4.14",
+    "clsx": "^1.2.1",
     "dotenv": "^16.0.3",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
