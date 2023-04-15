@@ -54,7 +54,7 @@ export default function Home() {
               key={campaign.id}
               title={campaign.sponsor}
               description={campaign.required_condition}
-              backgroundImage={campaign.image_url}
+              backgroundImage={campaign.image}
             />
           ))}
         </div>

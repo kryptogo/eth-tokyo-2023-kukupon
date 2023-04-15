@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 interface Campaign {
   id: string;
   required_condition: string[];
-  image_url: string;
+  image: string;
   sponsor: string;
 }
 
