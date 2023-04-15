@@ -43,7 +43,7 @@ contract WhitelistingPaymaster is BasePaymaster {
         UserDetails memory user = userDetails[userOp.sender];
         if (user.isWhitelisted) {
             if (user.remainingGas >= maxCost) {
-                return ("", 0);
+                return (abi.encode(userOp.sender, user.remainingGas), 0);
             }
         }
         return ("", 1);
@@ -58,7 +58,7 @@ contract WhitelistingPaymaster is BasePaymaster {
      * and the transaction should succeed there.
      */
     function _postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) internal override {
-        //we don't really care about the mode, we just pay the gas with the user's tokens.
+        //we don't really care about the mode, we just pay the gas with the user's remaining gas.
         (mode);
         (address sender, uint256 remainingGas) = abi.decode(context, (address, uint256));
         uint256 totalCost = actualGasCost + COST_OF_POST;

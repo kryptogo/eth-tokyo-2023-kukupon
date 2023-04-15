@@ -2,6 +2,7 @@ import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomiclabs/hardhat-etherscan";
 import "@typechain/hardhat";
 import "@nomicfoundation/hardhat-toolbox";
+require("hardhat-abi-exporter");
 require("dotenv").config();
 require("@nomiclabs/hardhat-ethers");
 
@@ -21,7 +22,7 @@ module.exports = {
   networks: {
     localhost: {
       url: "http://127.0.0.1:8545",
-      accounts: [PRIVATE_KEY_LOCAL],
+      // accounts: [PRIVATE_KEY_LOCAL],
     },
     mumbai: {
       url: `https://polygon-mumbai.infura.io/v3/${MUMBAI_API_KEY}`,
@@ -40,4 +41,14 @@ module.exports = {
   },
 
   allowUnlimitedContractSize: true,
+
+  abiExporter: {
+    path: "./data/abi",
+    runOnCompile: true,
+    clear: true,
+    flat: true,
+    // only: [":ERC20$"],
+    spacing: 2,
+    format: "json",
+  },
 };
