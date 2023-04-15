@@ -11,8 +11,6 @@ export default function Home() {
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data: campaigns, isLoading } = useCampaigns();
 
-  console.log(campaigns);
-
   function scrollToNext() {
     const duration = 300; // duration of the animation in milliseconds
     const targetPosition = window.scrollY + window.innerHeight; // calculate the target position of the scroll
@@ -50,9 +48,7 @@ export default function Home() {
           <div className="w-full h-full flex flex-col justify-center gap-[120px] max-w-[300px] md:max-w-[500px]">
             <div className="text-white font-cartoon">
               <div className="font-bold">
-                <div className="flex items-center justify-cneter">
-                  <LottieComponent></LottieComponent>
-                </div>
+                <div className="flex items-center justify-cneter"></div>
               </div>
 
               <h2 className="text-[24px]">
